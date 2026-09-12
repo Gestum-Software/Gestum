@@ -3,43 +3,31 @@ from django.db import migrations
 
 def create_groups_and_permissions(apps, schema_editor):
     Group = apps.get_model("auth", "Group")
+    ContentType = apps.get_model("contenttypes", "ContentType")
     Permission = apps.get_model("auth", "Permission")
 
     usuario, _ = Group.objects.get_or_create(name="usuario")
     tecnico, _ = Group.objects.get_or_create(name="tecnico")
     admin, _ = Group.objects.get_or_create(name="admin")
 
-    def get_permission(app_label, model, codename):
-        return Permission.objects.get(
-            content_type__app_label=app_label,
-            content_type__model=model,
+    resource_content_type, _ = ContentType.objects.get_or_create(
+        app_label="resources",
+        model="resource",
+    )
+
+    def get_permission(codename, name):
+        permission, _ = Permission.objects.get_or_create(
+            content_type=resource_content_type,
             codename=codename,
+            defaults={"name": name},
         )
+        return permission
 
     # Permissões nativas do model Resource
-    view_resource = get_permission(
-        "resources",
-        "resource",
-        "view_resource",
-    )
-
-    add_resource = get_permission(
-        "resources",
-        "resource",
-        "add_resource",
-    )
-
-    change_resource = get_permission(
-        "resources",
-        "resource",
-        "change_resource",
-    )
-
-    delete_resource = get_permission(
-        "resources",
-        "resource",
-        "delete_resource",
-    )
+    add_resource = get_permission("add_resource", "Can add resource")
+    change_resource = get_permission("change_resource", "Can change resource")
+    delete_resource = get_permission("delete_resource", "Can delete resource")
+    view_resource = get_permission("view_resource", "Can view resource")
 
     # Usuário
     usuario.permissions.add(view_resource)
