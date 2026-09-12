@@ -17,10 +17,3 @@ class Resource(models.Model):
 
     def __str__(self):
         return f"{self.nome} | ({self.status})"
-
-    class Meta:
-        permissions = [
-            ('can_create_resources', 'Pode criar recursos'),
-            ('can_delete_resources', 'Pode excluir recursos'),
-            ('can_edit_resources', 'Pode editar recursos'),
-        ]
