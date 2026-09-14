@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
-    TicketListView
+    TicketListView,
+    TickerCreateView
 )
 
 
@@ -11,5 +12,11 @@ urlpatterns = [
         '',
         TicketListView.as_view(),
         name='tickets_list'
+    ),
+
+    path(
+        'create/',
+        TickerCreateView.as_view(),
+        name='tickets_create'
     ),
 ]
