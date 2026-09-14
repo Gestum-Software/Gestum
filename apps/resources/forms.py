@@ -1,8 +1,8 @@
-from  django import forms
+from django import forms
 from .models import Resource
 
 
-class ResoruceForm(forms.ModelForm):
+class ResourceForm(forms.ModelForm):
 
     class Meta:
         model = Resource
@@ -11,7 +11,7 @@ class ResoruceForm(forms.ModelForm):
             'nome': forms.TextInput(attrs={
                 'class': 'campo-nome',
                 'placeholder': 'Nome do recurso',
-                }),
+            }),
 
             'observacoes': forms.Textarea(attrs={
                 'class': 'campo-observacoes campo',
