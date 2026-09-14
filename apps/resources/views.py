@@ -36,6 +36,6 @@ class ResourceUpdateView(UpdateView):
 
 class ResourceDeleteView(DeleteView):
     model = Resource
-    success_url = reverse_lazy('/recursos/')
+    success_url = reverse_lazy('resource:resource_list')
     slug_field = 'nome'
     slug_url_kwarg = 'nome'
