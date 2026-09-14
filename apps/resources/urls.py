@@ -3,7 +3,7 @@ from .views import (
     ResourcesListView,
     ResourcesCreateView,
     ResourceDetailView,
-    ResourceUpdateView
+    ResourceUpdateView,
 )
 
 
@@ -26,5 +26,11 @@ urlpatterns = [
         'recurso/<str:nome>/',
         ResourceDetailView.as_view(),
         name='resource_detail'
+    ),
+
+    path(
+        'update/<str:nome>',
+        ResourceUpdateView.as_view(),
+        name='resource_update'
     ),
 ]

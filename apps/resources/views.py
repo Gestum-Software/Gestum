@@ -20,3 +20,11 @@ class ResourceDetailView(DetailView):
     model = Resource
     slug_field = 'nome'
     slug_url_kwarg = 'nome'
+
+
+class ResourceUpdateView(UpdateView):
+    model = Resource
+    form_class = ResourceForm
+    success_url = '/recursos/'
+    slug_field = 'nome'
+    slug_url_kwarg = 'nome'
