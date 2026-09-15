@@ -3,6 +3,7 @@ from .views import (
     ReservationListView
 )
 
+app_name = 'reservations'
 
 urlpatterns = [
     path(
