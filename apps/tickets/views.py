@@ -8,7 +8,7 @@ class TicketListView(ListView):
     model = Ticket
 
 
-class TickerCreateView(CreateView):
+class TicketCreateView(CreateView):
     model = Ticket
     form_class = TicketForm
     success_url = 'chamados/'

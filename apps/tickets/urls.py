@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     TicketListView,
-    TickerCreateView
+    TicketCreateView
 )
 
 
@@ -16,7 +16,7 @@ urlpatterns = [
 
     path(
         'create/',
-        TickerCreateView.as_view(),
+        TicketCreateView.as_view(),
         name='tickets_create'
     ),
 ]
