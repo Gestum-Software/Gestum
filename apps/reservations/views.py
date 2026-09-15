@@ -32,3 +32,10 @@ class ReservationUpdateView(UpdateView):
     success_url = '/reservas/'
     slug_field = 'titulo'
     slug_url_kwarg = 'titulo'
+
+
+class ReservationDeleteView(DeleteView):
+    model = Reservation
+    success_url = reverse_lazy('reservations:reservation_list')
+    slug_field = 'titulo'
+    slug_url_kwarg = 'titulo'
