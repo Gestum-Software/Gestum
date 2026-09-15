@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
-    ReservationListView
+    ReservationListView,
+    ReservationCreateView,
 )
 
 app_name = 'reservations'
@@ -11,4 +12,11 @@ urlpatterns = [
         ReservationListView.as_view(),
         name='reservation_list',
     ),
+
+    path(
+        'create/',
+        ReservationCreateView.as_view(),
+        name='reservation_create',
+    ),
+
 ]
