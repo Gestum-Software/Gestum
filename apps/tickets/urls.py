@@ -4,6 +4,7 @@ from .views import (
     TicketCreateView,
     TicketDetailView,
     TickerUpdateView,
+    TicketDeleteView
 )
 
 
@@ -29,8 +30,14 @@ urlpatterns = [
     ),
 
     path(
-        'chamado/<str:titulo>',
+        'update/<str:titulo>',
         TickerUpdateView.as_view(),
         name='ticket_update',
-    )
+    ),
+
+    path(
+        'delete/<str:titulo',
+        TicketDeleteView.as_view(),
+        name='ticket_delete'
+    ),
 ]

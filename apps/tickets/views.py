@@ -1,7 +1,9 @@
+from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.edit import (
     CreateView,
     UpdateView,
+    DeleteView,
 )
 from django.views.generic.detail import DetailView
 from .models import Ticket
@@ -30,3 +32,10 @@ class TickerUpdateView(UpdateView):
     success_url = 'chamados/'
     slug_url_kwarg = 'titulo'
     slug_field = 'titulo'
+
+
+class TicketDeleteView(DeleteView):
+    model = Ticket
+    success_url = reverse_lazy('tickets/ticket_list')
+    slug_field = 'titulo'
+    slug_url_kwarg = 'titulo'
