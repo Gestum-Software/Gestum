@@ -18,3 +18,9 @@ class ReservationCreateView(CreateView):
     model = Reservation
     form_class = ReservationForm
     success_url = '/reservas/'
+
+
+class ReservationDetailView(DetailView):
+    model = Reservation
+    slug_field = 'titulo'
+    slug_url_kwarg = 'titulo'
