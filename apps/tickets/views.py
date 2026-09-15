@@ -17,7 +17,7 @@ class TicketListView(ListView):
 class TicketCreateView(CreateView):
     model = Ticket
     form_class = TicketForm
-    success_url = 'chamados/'
+    success_url = reverse_lazy('tickets:ticket_list')
 
 
 class TicketDetailView(DetailView):
@@ -29,13 +29,13 @@ class TicketDetailView(DetailView):
 class TickerUpdateView(UpdateView):
     model = Ticket
     form_class = TicketForm
-    success_url = 'chamados/'
+    success_url = reverse_lazy('tickets:ticket_list')
     slug_url_kwarg = 'titulo'
     slug_field = 'titulo'
 
 
 class TicketDeleteView(DeleteView):
     model = Ticket
-    success_url = reverse_lazy('tickets/ticket_list')
+    success_url = reverse_lazy('tickets:ticket_list')
     slug_field = 'titulo'
     slug_url_kwarg = 'titulo'

@@ -36,7 +36,7 @@ urlpatterns = [
     ),
 
     path(
-        'delete/<str:titulo',
+        'delete/<str:titulo>/',
         TicketDeleteView.as_view(),
         name='ticket_delete'
     ),
