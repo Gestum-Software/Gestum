@@ -3,6 +3,7 @@ from .views import (
     ReservationListView,
     ReservationCreateView,
     ReservationDetailView,
+    ReservationUpdateView,
 )
 
 app_name = 'reservations'
@@ -24,5 +25,11 @@ urlpatterns = [
         'reserva/<str:titulo>',
         ReservationDetailView.as_view(),
         name='reservation_detail',
+    ),
+
+    path(
+        'update/<str:titulo>',
+        ReservationUpdateView.as_view(),
+        name='reservation_update',
     ),
 ]

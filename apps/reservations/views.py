@@ -24,3 +24,11 @@ class ReservationDetailView(DetailView):
     model = Reservation
     slug_field = 'titulo'
     slug_url_kwarg = 'titulo'
+
+
+class ReservationUpdateView(UpdateView):
+    model = Reservation
+    form_class = ReservationForm
+    success_url = '/reservas/'
+    slug_field = 'titulo'
+    slug_url_kwarg = 'titulo'
