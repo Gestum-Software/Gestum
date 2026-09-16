@@ -19,6 +19,10 @@ class ReservationCreateView(CreateView):
     form_class = ReservationForm
     success_url = '/reservas/'
 
+    def form_valid(self, form):
+        form.instance.usuario = self.request.user
+        return super().form_valid(form)
+
 
 class ReservationDetailView(DetailView):
     model = Reservation
