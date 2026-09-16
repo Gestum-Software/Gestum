@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     AccountsListView,
-    AccountsCreateView,
+    AccountsWithGroupsCreateView,
 )
 
 app_name = 'accounts'
@@ -16,7 +16,7 @@ urlpatterns = [
 
     path(
         'create/',
-        AccountsCreateView.as_view(),
+        AccountsWithGroupsCreateView.as_view(),
         name='accounts_create',
     ),
 ]

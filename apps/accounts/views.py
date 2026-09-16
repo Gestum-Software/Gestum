@@ -16,7 +16,7 @@ class AccountsListView(ListView):
     model = User
 
 
-class AccountsCreateView(CreateView):
+class AccountsWithGroupsCreateView(CreateView):
     model = User
     form_class = CustomUserWithGroupsCreationForm
     success_url = '/usuarios/'
