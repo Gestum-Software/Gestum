@@ -23,4 +23,5 @@ urlpatterns = [
     path('recursos/', include('apps.resources.urls')),
     path('chamados/', include('apps.tickets.urls')),
     path('reservas/', include('apps.reservations.urls')),
+    path('usuarios/', include('apps.accounts.urls')),
 ]
