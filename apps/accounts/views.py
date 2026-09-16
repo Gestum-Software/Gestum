@@ -7,9 +7,16 @@ from django.views.generic.edit import (
     UpdateView,
     DeleteView,
 )
+from .forms import CustomUserWithGroupsCreationForm
 
 User = get_user_model()
 
 
 class AccountsListView(ListView):
     model = User
+
+
+class AccountsCreateView(CreateView):
+    model = User
+    form_class = CustomUserWithGroupsCreationForm
+    success_url = '/usuarios/'
