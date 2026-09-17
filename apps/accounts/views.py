@@ -3,10 +3,9 @@ from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.edit import (
     CreateView,
-    UpdateView,
     DeleteView,
 )
-from .forms import CustomUserWithGroupsCreationForm, CustomUserCreationForm
+from .forms import CustomUserWithGroupsCreationForm
 
 User = get_user_model()
 
