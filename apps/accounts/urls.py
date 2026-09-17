@@ -2,6 +2,7 @@ from django.urls import path
 from .views import (
     AccountsListView,
     AccountsWithGroupsCreateView,
+    AccountsDeleteView,
 )
 
 app_name = 'accounts'
@@ -18,5 +19,11 @@ urlpatterns = [
         'create/',
         AccountsWithGroupsCreateView.as_view(),
         name='accounts_create',
+    ),
+
+    path(
+        'delete/<str:username>',
+        AccountsDeleteView.as_view(),
+        name='accounts_delete',
     ),
 ]
