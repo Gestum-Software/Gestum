@@ -1,11 +1,30 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+
+    <title>Gestum - Dahsboard</title>
 </head>
 <body>
-    <h1>Dahsboard</h1>
+    <header>
+        <div class="logo">Isto é uma logo</div>
+        <i class="fa-solid fa-gear"></i>
+    </header>
+
+    <main>
+        <section id="section-links">
+            <div class="dashboard-links">
+                <a class="dashboard-link" href="{% url 'resource:resource_list' %}"></a>
+                <a class="dashboard-link" href="{% url 'tickets:ticket_list' %}"></a>
+                <a class="dashboard-link" href="{% url 'reservations:reservation_list' %}"></a>
+                <a class="dashboard-link" href="{% url 'accounts:accounts_list' %}"></a>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
