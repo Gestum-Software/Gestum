@@ -1,0 +1,40 @@
+:root {
+
+    /* ========== CORES ========== */
+    --primary: #031927;
+    --secondary: #6B3030;
+    --background: #F9F1F1;
+    --surface: #ffffff;
+    --text-primary: #252222;
+    --text-secondary: #403A3A;
+    --sucess: #2BA84A;
+    --warining: #E2B014;
+    --danger: #BD180F;
+    --border: #587D71;
+    --white-text: #ffffff;
+
+    --font-primary: 'Manrope', sans-serif;
+    
+    /* Font Size Base */
+    --font-size-base: 1rem;  /* 16px */
+
+    /* Font Sizes - Escala 1.25 */
+    --font-size-xs:   0.694rem; /* ~11.11px */
+    --font-size-sm:   0.833rem; /* ~13.33px */
+    --font-size-base: 1rem;     /* 16px — tamanho de referência */
+    --font-size-md:   1.2rem;   /* ~19.2px */
+    --font-size-lg:   1.44rem;  /* ~23.04px */
+    --font-size-xl:   1.728rem; /* ~27.65px */
+    --font-size-2xl:  2.074rem; /* ~33.18px */
+    --font-size-3xl:  2.488rem; /* ~39.81px */
+    --font-size-4xl:  2.986rem; /* ~47.78px */
+    --font-size-5xl:  3.583rem; /* ~57.33px */
+
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extra-bold: 800;
+}
