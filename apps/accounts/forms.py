@@ -26,7 +26,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 class CustomUserWithGroupsCreationForm(CustomUserCreationForm):
 
-    groups = forms.ModelChoiceField(
+    groups = forms.ModelMultipleChoiceField(
         queryset=Group.objects.all(),
         required=True,
         widget=forms.CheckboxSelectMultiple(attrs={
