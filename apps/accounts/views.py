@@ -18,6 +18,7 @@ class AccountsWithGroupsCreateView(CreateView):
     model = User
     form_class = CustomUserWithGroupsCreationForm
     success_url = '/usuarios/'
+    template_name_suffix = '_form_with_groups'
 
 
 class AccountsDeleteView(DeleteView):
