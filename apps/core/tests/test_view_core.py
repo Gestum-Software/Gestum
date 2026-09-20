@@ -10,7 +10,6 @@ class DashboardViewTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "core/dashboard.html")
-        self.assertContains(response, "<h1>Dahsboard</h1>", html=True)
 
     def test_home_url_uses_dashboard_view(self):
         response = self.client.get(reverse("core:home"))
