@@ -12,17 +12,17 @@
 </head>
 <body>
     <header>
-        <div class="logo">Isto é uma logo</div>
-        <i class="fa-solid fa-gear"></i>
+        <div class="logo">GESTUM</div>
+        <i class="fa-solid fa-gear fa-2xl fa-width-auto" style="color: #031927;"></i>
     </header>
 
     <main>
         <section id="section-links">
             <div class="dashboard-links">
-                <a class="dashboard-link" href="{% url 'resource:resource_list' %}"></a>
-                <a class="dashboard-link" href="{% url 'tickets:ticket_list' %}"></a>
-                <a class="dashboard-link" href="{% url 'reservations:reservation_list' %}"></a>
-                <a class="dashboard-link" href="{% url 'accounts:accounts_list' %}"></a>
+                <a class="dashboard-link" href="{% url 'resource:resource_list' %}">Recursos</a>
+                <a class="dashboard-link" href="{% url 'tickets:ticket_list' %}">Chamados</a>
+                <a class="dashboard-link" href="{% url 'reservations:reservation_list' %}">Reservas</a>
+                <a class="dashboard-link link-usuario" href="{% url 'accounts:accounts_list' %}">Usuários</a>
             </div>
         </section>
     </main>
