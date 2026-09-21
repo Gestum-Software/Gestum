@@ -7,13 +7,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/responsive.css' %}">
 
     <title>Gestum - Dahsboard</title>
 </head>
 <body>
     <header>
         <div class="logo">GESTUM</div>
-        <i class="fa-solid fa-gear fa-2xl fa-width-auto" style="color: #031927;"></i>
+        <i class="dashboard-settings-icon fa-solid fa-gear fa-2xl fa-width-auto"
+           aria-label="Configurações"
+           role="img"></i>
     </header>
 
     <main>
@@ -26,5 +29,7 @@
             </div>
         </section>
     </main>
+
+    <aside class="dashboard-settings-panel" aria-label="Painel lateral de configurações"></aside>
 </body>
 </html>
