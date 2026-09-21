@@ -1,0 +1,26 @@
+@media (min-width: 992px) {
+    body {
+        padding-right: 20rem;
+    }
+
+    .dashboard-settings-icon {
+        display: none;
+    }
+
+    .dashboard-settings-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 20rem;
+        background-color: var(--surface);
+        border-left: 1px solid var(--border);
+        box-shadow: -0.25rem 0 1rem rgb(3 25 39 / 10%);
+    }
+}
+
+@media (max-width: 991px) {
+    .dashboard-settings-panel {
+        display: none;
+    }
+}
