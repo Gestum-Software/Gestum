@@ -119,6 +119,8 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'assets',
+    BASE_DIR / 'apps' / 'core' / 'assets',
+    BASE_DIR / 'apps' / 'tickets' / 'assets',
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
