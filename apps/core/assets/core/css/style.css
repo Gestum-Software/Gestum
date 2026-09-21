@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import '../../css/root.css';
+@import '../../css/base.css';
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+    background-color: transparent;
+    align-items: center;
+}
+
+.dashboard-settings-icon {
+    color: var(--primary);
+}
+
+#section-links {
+    padding: 2rem;
+}
+
+.dashboard-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.dashboard-link {
+    width: 100%;
+    max-width: 120rem;
+    padding: 0.8rem 7.5rem;
+    background-color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--white-text);
+    border-radius: 0.5rem;
+    border: solid 1px var(--border);
+}
+
+.link-usuario {
+    background-color: var(--secondary);
+}
