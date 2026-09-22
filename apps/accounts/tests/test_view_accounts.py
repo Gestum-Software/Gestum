@@ -117,7 +117,7 @@ class AccountsViewTest(TestCase):
 
     def test_initial_admin_view_get_displays_form(self):
         response = self.client.get(
-            reverse("accounts:initial-admin-create")
+            reverse("accounts:accounts_initial_admin_create")
         )
 
         self.assertEqual(response.status_code, 200)
@@ -141,7 +141,7 @@ class AccountsViewTest(TestCase):
         }
 
         response = self.client.post(
-            reverse("accounts:initial-admin-create"),
+            reverse("accounts:accounts_initial_admin_create"),
             data=account_data,
         )
 
@@ -164,7 +164,7 @@ class AccountsViewTest(TestCase):
         self,
     ):
         response = self.client.post(
-            reverse("accounts:initial-admin-create"),
+            reverse("accounts:accounts_initial_admin_create"),
             data={
                 "username": "",
                 "password1": "",

@@ -7,6 +7,9 @@ from .views.users import (
 from .views.setup import (
     InitialAdminCreateView,
 )
+from .views.authentication import (
+    AccountsLoginView,
+)
 
 app_name = 'accounts'
 
@@ -33,6 +36,6 @@ urlpatterns = [
     path(
         'create-initial-admin/',
         InitialAdminCreateView.as_view(),
-        name='initial-admin-create'
-    )
+        name='accounts_initial_admin_create',
+    ),
 ]

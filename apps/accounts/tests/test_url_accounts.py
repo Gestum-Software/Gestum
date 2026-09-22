@@ -26,7 +26,7 @@ class AccountsUrlTest(TestCase):
         expected_urls = {
             "accounts_list": ("/usuarios/", {}),
             "accounts_create": ("/usuarios/create/", {}),
-            "initial-admin-create": ("/usuarios/create-initial-admin/", {}),
+            "accounts_initial_admin_create": ("/usuarios/create-initial-admin/", {}),
             "accounts_delete": (
                 f"/usuarios/delete/{self.user.username}",
                 {"username": self.user.username},
@@ -44,7 +44,7 @@ class AccountsUrlTest(TestCase):
         expected_views = {
             "accounts_list": AccountsListView,
             "accounts_create": AccountsWithGroupsCreateView,
-            "initial-admin-create": InitialAdminCreateView,
+            "accounts_initial_admin_create": InitialAdminCreateView,
             "accounts_delete": AccountsDeleteView,
         }
 
@@ -66,7 +66,7 @@ class AccountsUrlTest(TestCase):
         url_kwargs = {
             "accounts_list": {},
             "accounts_create": {},
-            "initial-admin-create": {},
+            "accounts_initial_admin_create": {},
             "accounts_delete": {"username": self.user.username},
         }
 
