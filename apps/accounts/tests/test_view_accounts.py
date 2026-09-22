@@ -3,6 +3,8 @@ from django.contrib.auth.models import Group
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from apps.accounts.views.setup import InitialAdminCreateView
+
 
 User = get_user_model()
 
@@ -10,6 +12,7 @@ ACCOUNT_TEMPLATES = {
     "accounts/accounts_list.html": "{{ object_list }}",
     "accounts/accounts_form_with_groups.html": "{{ form }}",
     "accounts/accounts_confirm_delete.html": "{{ object }}",
+    "accounts/accounts_initial_admin_form.html": "{{ form }}",
 }
 
 TEMPLATES = [
@@ -35,6 +38,7 @@ class AccountsViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.group = Group.objects.create(name="Administradores")
+        cls.admin_group, _ = Group.objects.get_or_create(name="admin")
         cls.user = User.objects.create_user(
             username="usuario-teste",
             password="SenhaSegura123!",
@@ -107,6 +111,71 @@ class AccountsViewTest(TestCase):
         self.assertTemplateUsed(
             response,
             "accounts/accounts_form_with_groups.html",
+        )
+        self.assertTrue(response.context["form"].errors)
+        self.assertEqual(User.objects.count(), 1)
+
+    def test_initial_admin_view_get_displays_form(self):
+        response = self.client.get(
+            reverse("accounts:initial-admin-create")
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response,
+            "accounts/accounts_initial_admin_form.html",
+        )
+        self.assertIsInstance(response.context["view"], InitialAdminCreateView)
+        self.assertEqual(
+            response.context["form"].instance.__class__,
+            User,
+        )
+        self.assertIsNone(response.context["form"].instance.pk)
+
+    def test_initial_admin_view_post_creates_admin_and_redirects(self):
+        account_data = {
+            "username": "administrador-inicial",
+            "password": "SenhaSegura123!",
+            "password1": "SenhaSegura123!",
+            "password2": "SenhaSegura123!",
+        }
+
+        response = self.client.post(
+            reverse("accounts:initial-admin-create"),
+            data=account_data,
+        )
+
+        created_user = User.objects.get(
+            username=account_data["username"]
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("accounts:accounts_list"),
+        )
+        self.assertTrue(
+            created_user.groups.filter(pk=self.admin_group.pk).exists()
+        )
+        self.assertTrue(
+            created_user.check_password(account_data["password1"])
+        )
+
+    def test_initial_admin_view_post_with_invalid_data_does_not_create_account(
+        self,
+    ):
+        response = self.client.post(
+            reverse("accounts:initial-admin-create"),
+            data={
+                "username": "",
+                "password1": "",
+                "password2": "",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response,
+            "accounts/accounts_initial_admin_form.html",
         )
         self.assertTrue(response.context["form"].errors)
         self.assertEqual(User.objects.count(), 1)
