@@ -38,4 +38,10 @@ urlpatterns = [
         InitialAdminCreateView.as_view(),
         name='accounts_initial_admin_create',
     ),
+
+    path(
+        'login/',
+        AccountsLoginView.as_view(),
+        name='accounts_login',
+    ),
 ]
