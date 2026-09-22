@@ -5,7 +5,7 @@ from django.views.generic.edit import (
     CreateView,
     DeleteView,
 )
-from .forms import CustomUserWithGroupsCreationForm
+from ..forms import CustomUserWithGroupsCreationForm
 
 User = get_user_model()
 
