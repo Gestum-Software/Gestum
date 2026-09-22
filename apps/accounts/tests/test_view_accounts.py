@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from apps.accounts.views.authentication import AccountsLoginView
 from apps.accounts.views.setup import InitialAdminCreateView
 
 
@@ -13,6 +14,7 @@ ACCOUNT_TEMPLATES = {
     "accounts/accounts_form_with_groups.html": "{{ form }}",
     "accounts/accounts_confirm_delete.html": "{{ object }}",
     "accounts/accounts_initial_admin_form.html": "{{ form }}",
+    "accounts/accounts_login.html": "{{ form }}",
 }
 
 TEMPLATES = [
@@ -54,6 +56,33 @@ class AccountsViewTest(TestCase):
             "accounts/accounts_list.html",
         )
         self.assertIn(self.user, response.context["object_list"])
+
+    def test_login_view_get_displays_form(self):
+        response = self.client.get(reverse("accounts:accounts_login"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response,
+            "accounts/accounts_login.html",
+        )
+        self.assertIsInstance(response.context["view"], AccountsLoginView)
+        self.assertEqual(response.context["form"].initial, {})
+
+    def test_login_view_post_authenticates_user_and_redirects(self):
+        response = self.client.post(
+            reverse("accounts:accounts_login"),
+            data={
+                "username": self.user.username,
+                "password": "SenhaSegura123!",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("core:home"),
+            fetch_redirect_response=False,
+        )
+        self.assertEqual(int(self.client.session["_auth_user_id"]), self.user.pk)
 
     def test_create_view_get_displays_form(self):
         response = self.client.get(reverse("accounts:accounts_create"))
