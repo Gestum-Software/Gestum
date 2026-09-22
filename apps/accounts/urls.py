@@ -4,6 +4,9 @@ from .views.users import (
     AccountsWithGroupsCreateView,
     AccountsDeleteView,
 )
+from .views.setup import (
+    InitialAdminCreateView,
+)
 
 app_name = 'accounts'
 
@@ -26,4 +29,10 @@ urlpatterns = [
         AccountsDeleteView.as_view(),
         name='accounts_delete',
     ),
+
+    path(
+        'create-initial-admin/',
+        InitialAdminCreateView.as_view(),
+        name='initial-admin-create'
+    )
 ]
