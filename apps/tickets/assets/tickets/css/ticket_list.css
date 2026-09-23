@@ -54,3 +54,7 @@ main {
 .ticket-list {
     margin-top: 1.5rem;
 }
+
+.ticket-title {
+    color: var(--text-primary);
+}
