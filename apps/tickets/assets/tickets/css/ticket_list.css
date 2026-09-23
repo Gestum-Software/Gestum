@@ -21,6 +21,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    color: var(--text-primary);
 }
 
 .ticket-header {
@@ -53,8 +54,4 @@ main {
 
 .ticket-list {
     margin-top: 1.5rem;
-}
-
-.ticket-title {
-    color: var(--text-primary);
 }

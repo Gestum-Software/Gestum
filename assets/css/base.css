@@ -16,3 +16,7 @@ body {
     background-color: var(--background);
     font-family: var(--font-primary);
 }
+
+h1 {
+    color: var(--text-primary);
+}
