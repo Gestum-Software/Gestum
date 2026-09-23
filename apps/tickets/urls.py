@@ -24,7 +24,7 @@ urlpatterns = [
     ),
 
     path(
-        'chamado/<str:titulo>',
+        'chamado/<str:titulo>/',
         TicketDetailView.as_view(),
         name='ticket_detail',
     ),
