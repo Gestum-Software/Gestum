@@ -1,13 +1,59 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'tickets/css/ticket_list.css' %}">
-</head>
-<body>
-    <h1>ListView</h1>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<title>Document</title>
+		<link rel="stylesheet" href="{% static 'tickets/css/ticket_list.css' %}" />
+	</head>
+	<body>
+		<header>
+			<div>
+				<span>Logo Gestum</span>
+			</div>
+			<div>
+				<a href="{% url 'core:home' %}" class="link-voltar"><i class="fa-regular fa-circle-left fa-2xl" style="color: #6b3030;"></i></a>
+			</div>
+		</header>
+
+		<main>
+			<h1>Chamados</h1>
+
+			<div class="ticket-list">
+				{% for ticket in object_list %}
+					<div class="ticket">
+						<div class="ticket-header">
+							<h2 class="ticker-tittle">{{ ticket.titulo }}</h2>
+
+							<div class="b-edit-delete">
+								<a href="{% url 'tickets:ticket_update' ticket.titulo %}">
+                                    <i class="fa-solid fa-pen-to-square fa-lg" style="color: #6b3030;"></i>
+                                </a>
+								<a href="{% url 'tickets:ticket_delete' ticket.titulo %}">
+                                    <i class="fa-solid fa-trash" style="color: #bd180f;"></i>
+                                </a>
+							</div>
+						</div>
+
+                        <div class="ticket-actions">
+                            <div class="ticket-status ticket-action">
+                                <i class="fa-solid fa-hourglass-end fa-lg" style="color: #6b3030;"></i>
+                                <p>{{ ticket.status }}</p>
+                            </div>
+                            <div class="ticket-detail ticket-action">
+                                <i class="fa-solid fa-info fa-lg" style="color: #6b3030;"></i>
+                                <a href="{% url 'tickets:ticket_detail' ticket.titulo %}">Ver detalhes</a>
+                            </div>
+                        </div>
+					</div>
+				{% empty %}
+					<div>
+						<h2>Não foi possível encontrar nenhum chamado!</h2>
+					</div>
+				{% endfor %}
+			</div>
+		</main>
+	</body>
 </html>
