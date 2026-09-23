@@ -30,7 +30,7 @@ urlpatterns = [
     ),
 
     path(
-        'update/<str:titulo>',
+        'update/<str:titulo>/',
         TickerUpdateView.as_view(),
         name='ticket_update',
     ),
