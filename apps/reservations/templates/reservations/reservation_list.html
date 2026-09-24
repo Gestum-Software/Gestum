@@ -3,9 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <title>Gestum - Reservas</title>
 </head>
 <body>
-    
+    <header>
+        <div>
+            <span>Logo Gestum</span>
+        </div>
+        <div>
+            <a href="{% url 'core:home' %}" class="link-voltar">
+                <i class="fa-regular fa-circle-left fa-2xl" style="color: #6b3030;"></i>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container-criar-reserva">
+            <a href="{% url 'reservations:reservation_create' %}" class="btn-criar-reserva">
+                Criar Reserva
+            </a>
+        </div>
+
+        <div class="reservation-list">
+            {% for reservation in object_list %}
+
+            <div class="reservation">
+                <div class="reservation-header">
+                    <h2 class="reservation-title">{{ reservation.titulo }}</h2>
+
+                    <div class="b-delete">
+                        <a href="">
+                            <i class="fa-solid fa-trash" style="color: #bd180f;"></i>
+                        </a>
+                    </div>
+            </div>
+
+            <div class="reservation-actions">
+                <a href="{% url 'reservations:reservation_update' reservation.titulo %}">
+                    <i class="fa-solid fa-pen-to-square fa-lg" style="color: #6b3030;"></i>
+                    Editar reserva
+                </a>
+                <div class="reservation-date">
+                    <i class="fa-regular fa-calendar fa-lg" style="color: #6b3030;"></i>
+                    <p>
+                        {{ reservation.inicio }} | {{ reservation.fim }}
+                    </p>
+                </div>
+            </div>
+
+            {% empty %}
+                <div>
+                    <h2>Não foi possível encontrar nenhuma reserva!</h2>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
 </body>
 </html>
