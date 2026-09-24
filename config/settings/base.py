@@ -121,6 +121,9 @@ STATICFILES_DIRS = [
     BASE_DIR / 'assets',
     BASE_DIR / 'apps' / 'core' / 'assets',
     BASE_DIR / 'apps' / 'tickets' / 'assets',
+    BASE_DIR / 'apps' / 'resources' / 'assets',
+    BASE_DIR / 'apps' / 'reservations' / 'assets',
+    BASE_DIR / 'apps' / 'accounts' / 'assets',
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
