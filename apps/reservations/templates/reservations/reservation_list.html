@@ -1,9 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <link rel="stylesheet" href="{% static 'reservations/css/reservation_list.css' %}">
 
     <title>Gestum - Reservas</title>
 </head>
@@ -29,29 +32,31 @@
         <div class="reservation-list">
             {% for reservation in object_list %}
 
-            <div class="reservation">
-                <div class="reservation-header">
-                    <h2 class="reservation-title">{{ reservation.titulo }}</h2>
+                <div class="reservation">
+                    <div class="reservation-header">
+                        <h2 class="reservation-title">{{ reservation.titulo }}</h2>
 
-                    <div class="b-delete">
-                        <a href="">
-                            <i class="fa-solid fa-trash" style="color: #bd180f;"></i>
-                        </a>
+                        <div class="b-delete">
+                            <a href="{% url 'reservations:reservation_delete' reservation.titulo %}">
+                                <i class="fa-solid fa-trash" style="color: #bd180f;"></i>
+                            </a>
+                        </div>
                     </div>
-            </div>
 
-            <div class="reservation-actions">
-                <a href="{% url 'reservations:reservation_update' reservation.titulo %}">
-                    <i class="fa-solid fa-pen-to-square fa-lg" style="color: #6b3030;"></i>
-                    Editar reserva
-                </a>
-                <div class="reservation-date">
-                    <i class="fa-regular fa-calendar fa-lg" style="color: #6b3030;"></i>
-                    <p>
-                        {{ reservation.inicio }} | {{ reservation.fim }}
-                    </p>
+                    <div class="reservation-actions">
+                        <a class="link-to-update reservation-action" href="{% url 'reservations:reservation_update' reservation.titulo %}">
+                            <i class="fa-solid fa-pen-to-square fa-lg" style="color: #6b3030;"></i>
+                            Editar reserva
+                        </a>
+                        <div class="reservation-date reservation-action">
+                            <i class="fa-regular fa-calendar fa-lg" style="color: #6b3030;"></i>
+                            <p>
+                                {{ reservation.inicio|date:"d/m H:i" }} | {{ reservation.fim|date:"d/m H:i" }}
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
 
             {% empty %}
                 <div>
