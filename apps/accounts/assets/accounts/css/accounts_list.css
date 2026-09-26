@@ -1,0 +1,63 @@
+@import '../../css/base.css';
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0rem 4rem;
+}
+
+.users-list {
+    width: 100%;
+    max-width: 30rem;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.user {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-radius: .75rem;
+    border: solid 1px var(--border);
+    gap: 1rem;
+    width: 100%;
+}
+
+.user-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .5rem;
+    border: solid 1px var(--border);
+    width: 100%;
+    padding: .5rem;
+    background-color: var(--background);
+    display: flex;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text-secondary);
+}
+
+.user-actions {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.btn-criar-usuario {
+    text-decoration: none;
+    color: var(--white-text);
+    background-color: var(--primary);
+    border-radius: .5rem;
+    padding: .75rem 6rem;
+}
