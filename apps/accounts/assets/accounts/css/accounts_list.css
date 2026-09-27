@@ -46,6 +46,7 @@ main {
     border-radius: .5rem;
     padding: .5rem;
     width: 100%;
+    transition: .35s;
 }
 
 .user-actions {
@@ -60,4 +61,14 @@ main {
     background-color: var(--primary);
     border-radius: .5rem;
     padding: .75rem 6rem;
+    transition: transform .3s ease;
+    display: inline-block;
+}
+
+.btn-criar-usuario:hover {
+    transform: scale(1.05);
+}
+
+.user-action:hover {
+    background-color: var(--surface);
 }
