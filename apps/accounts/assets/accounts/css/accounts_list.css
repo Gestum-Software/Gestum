@@ -29,6 +29,7 @@ main {
     padding: 1rem;
     border-radius: .75rem;
     border: solid 1px var(--border);
+    background-color: var(--surface);
     gap: 1rem;
     width: 100%;
 }
@@ -37,15 +38,14 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: .5rem;
-    border: solid 1px var(--border);
-    width: 100%;
-    padding: .5rem;
     background-color: var(--background);
-    display: flex;
     justify-content: center;
-    text-decoration: none;
     color: var(--text-secondary);
+    text-decoration: none;
+    border: solid 1px var(--border);
+    border-radius: .5rem;
+    padding: .5rem;
+    width: 100%;
 }
 
 .user-actions {
