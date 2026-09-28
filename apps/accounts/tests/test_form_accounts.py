@@ -4,12 +4,98 @@ from django.contrib.auth.models import Group
 from django.test import TestCase
 
 from apps.accounts.forms import (
+    CustomAuthenticationForm,
     CustomUserCreationForm,
     CustomUserWithGroupsCreationForm,
 )
 
 
 User = get_user_model()
+
+
+class CustomAuthenticationFormTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(
+            username="usuario-autenticacao",
+            password="SenhaSegura123!",
+        )
+
+    def test_form_exposes_expected_fields(self):
+        form = CustomAuthenticationForm()
+
+        self.assertEqual(
+            list(form.fields),
+            ["username", "password"],
+        )
+
+    def test_form_uses_expected_widgets_and_attributes(self):
+        form = CustomAuthenticationForm()
+
+        self.assertIsInstance(form.fields["username"].widget, forms.TextInput)
+        self.assertEqual(
+            form.fields["username"].widget.attrs,
+            {
+                "class": "form-control",
+                "maxlength": 150,
+                "placeholder": "Digite seu usuário",
+            },
+        )
+        self.assertIsInstance(
+            form.fields["password"].widget,
+            forms.PasswordInput,
+        )
+        self.assertEqual(
+            form.fields["password"].widget.attrs,
+            {
+                "class": "form-control",
+                "placeholder": "Digite sua senha",
+            },
+        )
+
+    def test_form_accepts_valid_credentials(self):
+        form = CustomAuthenticationForm(
+            data={
+                "username": self.user.username,
+                "password": "SenhaSegura123!",
+            },
+        )
+
+        self.assertTrue(form.is_valid(), form.errors.as_text())
+        self.assertEqual(form.get_user(), self.user)
+
+    def test_form_rejects_invalid_credentials(self):
+        form = CustomAuthenticationForm(
+            data={
+                "username": self.user.username,
+                "password": "SenhaIncorreta123!",
+            },
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("__all__", form.errors)
+        self.assertEqual(
+            form.errors.as_data()["__all__"][0].code,
+            "invalid_login",
+        )
+
+    def test_form_rejects_missing_required_fields(self):
+        form = CustomAuthenticationForm(
+            data={
+                "username": "",
+                "password": "",
+            },
+        )
+
+        self.assertFalse(form.is_valid())
+        for field_name in ("username", "password"):
+            with self.subTest(field=field_name):
+                self.assertIn(field_name, form.errors)
+                self.assertEqual(
+                    form.errors.as_data()[field_name][0].code,
+                    "required",
+                )
 
 
 class CustomUserCreationFormTest(TestCase):

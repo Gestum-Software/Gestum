@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import Group
 
 User = get_user_model()
@@ -47,3 +47,15 @@ class CustomUserWithGroupsCreationForm(CustomUserCreationForm):
                 user.groups.set(self.cleaned_data['groups'])
             self.save_m2m = new_save_m2m
         return user
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Digite seu usuário'
+    }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Digite sua senha'
+    }))
