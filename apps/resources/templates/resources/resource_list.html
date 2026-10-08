@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'resources/css/resource_list.css' %}">
+    <title>Recursos</title>
+</head>
+
+<body>
+    <main class="page">
+
+        {% if perms.resources.add_resource %}
+        <a href="{% url 'resource:resource_create' %}" class="btn btn--primary">Criar recurso</a>
+        {% endif %}
+
+        <ul class="card-list">
+            {% for resource in object_list %}
+            <li class="card">
+                <div class="card__header">
+                    <h2 class="card__title">
+                        <a href="{% url 'resource:resource_detail' resource.nome %}">{{ resource.nome }}</a>
+                    </h2>
+
+                    <div class="card__icons">
+                        {% if perms.resources.change_resource %}
+                        <a href="{% url 'resource:resource_update' resource.nome %}" class="icon-btn" aria-label="Editar">✏️</a>
+                        {% endif %}
+                        {% if perms.resources.delete_resource %}
+                        <a href="{% url 'resource:resource_delete' resource.nome %}" class="icon-btn" aria-label="Excluir">🗑️</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <span class="status status--{{ resource.status }}">{{ resource.get_status_display }}</span>
+
+                {% if resource.observacoes %}
+                <p class="card__text">{{ resource.observacoes|truncatechars:100 }}</p>
+                {% endif %}
+
+                <div class="card__actions">
+                    <a href="#" class="btn btn--outline">Abrir Chamado</a>
+                    <a href="#" class="btn btn--outline">Reservar Recurso</a>
+                </div>
+            </li>
+            {% empty %}
+            <li class="empty">Nenhum recurso cadastrado.</li>
+            {% endfor %}
+        </ul>
+
+    </main>
+</body>
+
+</html>
