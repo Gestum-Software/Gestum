@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <link rel="stylesheet" href="{% static 'accounts/css/accounts_list.css' %}">
+    
+    <title>Gestum - Usuários</title>
+</head>
+<body>
+    <header>
+        <div>
+            <span>Logo Gestum</span>
+        </div>
+        <div>
+            <a href="{% url 'core:home' %}" class="link-voltar"><i class="fa-regular fa-circle-left fa-2xl" style="color: #6b3030;"></i></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container-criar-usuario">
+            <a href="{% url 'accounts:accounts_create' %}" class="btn-criar-usuario">
+                Criar usuário
+            </a>
+        </div>
+
+        <div class="users-list">
+            {% for user in object_list %}
+            
+                <div class="user">
+                    <h2>{{ user.username }}</h2>
+
+                    <div class="user-actions">
+                        <a class="user-action user-link-edit" href="#">
+                            <i class="fa-solid fa-pen-to-square fa-lg" style="color: #6b3030;"></i>
+                            Editar
+                        </a>
+
+                        <a class="user-action user-link-delete" href="{% url 'accounts:accounts_delete' user.username %}">
+                            <i class="fa-solid fa-trash fa-lg" style="color: #bd180f;"></i>
+                            Excluir
+                        </a>
+                    </div>
+                </div>
+            
+            {% empty %}
+                <div>
+                    <h2>Não foi possível encontrar nenhum usuario!</h2>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>

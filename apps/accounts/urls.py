@@ -1,8 +1,14 @@
 from django.urls import path
-from .views import (
+from .views.users import (
     AccountsListView,
     AccountsWithGroupsCreateView,
     AccountsDeleteView,
+)
+from .views.setup import (
+    InitialAdminCreateView,
+)
+from .views.authentication import (
+    AccountsLoginView,
 )
 
 app_name = 'accounts'
@@ -25,5 +31,17 @@ urlpatterns = [
         'delete/<str:username>',
         AccountsDeleteView.as_view(),
         name='accounts_delete',
+    ),
+
+    path(
+        'create-initial-admin/',
+        InitialAdminCreateView.as_view(),
+        name='accounts_initial_admin_create',
+    ),
+
+    path(
+        'login/',
+        AccountsLoginView.as_view(),
+        name='accounts_login',
     ),
 ]

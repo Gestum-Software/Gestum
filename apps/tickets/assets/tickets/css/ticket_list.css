@@ -1,0 +1,63 @@
+@import '../../css/base.css';
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0rem 4rem;
+}
+
+.ticket {
+    background-color: var(--surface);
+    border-radius: 0.75rem;
+    border: solid 1px var(--border);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    color: var(--text-primary);
+    max-width: 30rem;
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4rem;
+}
+
+.ticket-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .5rem;
+    border: solid 1px var(--border);
+    width: 100%;
+    padding: .5rem;
+    background-color: var(--background);
+}
+
+.ticket-action a {
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.ticket-actions {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.ticket-list {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}

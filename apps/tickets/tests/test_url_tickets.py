@@ -39,11 +39,11 @@ class TicketUrlTest(TestCase):
             "ticket_list": ("/chamados/", {}),
             "ticket_create": ("/chamados/create/", {}),
             "ticket_detail": (
-                "/chamados/chamado/Projetor",
+                "/chamados/chamado/Projetor/",
                 {"titulo": self.ticket.titulo},
             ),
             "ticket_update": (
-                "/chamados/update/Projetor",
+                "/chamados/update/Projetor/",
                 {"titulo": self.ticket.titulo},
             ),
             "ticket_delete": (

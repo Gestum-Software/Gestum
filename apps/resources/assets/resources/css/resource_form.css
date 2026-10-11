@@ -1,0 +1,428 @@
+@import "../../css/base.css";
+/* =========================
+   CONFIGURAÇÕES GERAIS
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+
+    /* Cores principais */
+    --color-background: #fff6f6;
+    --color-surface: #ffffff;
+
+    --color-primary: #001e2b;
+    --color-primary-hover: #003044;
+
+    --color-accent: #eeb000;
+    --color-accent-hover: #d89f00;
+
+    --color-text: #222222;
+    --color-text-secondary: #666666;
+
+    --color-border: #8fa3a3;
+
+    --color-success: #207a47;
+    --color-success-background: #e9f8ef;
+
+    --color-error: #b3261e;
+    --color-error-background: #fdecea;
+
+    /* Medidas */
+    --border-radius: 5px;
+    --container-width: 520px;
+
+    /* Transição padrão */
+    --transition: 0.2s ease;
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+body {
+    min-height: 100vh;
+
+    background-color: var(--color-background);
+
+    color: var(--color-text);
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+
+/* =========================
+   CONTAINER PRINCIPAL
+========================= */
+
+.page-container {
+    width: 100%;
+    max-width: var(--container-width);
+
+    min-height: 100vh;
+
+    margin: 0 auto;
+
+    padding: 22px 24px 32px;
+}
+
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+.page-header {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 28px;
+}
+
+.logo {
+    font-size: 32px;
+    font-weight: 400;
+    color: #000000;
+}
+
+
+/* =========================
+   BOTÃO VOLTAR
+========================= */
+
+.back-button {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: var(--color-accent);
+
+    border-radius: 50%;
+
+    text-decoration: none;
+
+    transition:
+        background-color var(--transition),
+        transform var(--transition);
+}
+
+.back-button:hover {
+    background-color: var(--color-accent-hover);
+    transform: scale(1.05);
+}
+
+.back-button:active {
+    transform: scale(0.95);
+}
+
+
+/* Seta criada apenas com CSS */
+
+.arrow {
+    width: 13px;
+    height: 13px;
+
+    border-left: 5px solid white;
+    border-bottom: 5px solid white;
+
+    transform: rotate(45deg);
+
+    margin-left: 5px;
+}
+
+
+/* =========================
+   CARD DO FORMULÁRIO
+========================= */
+
+.form-card {
+    width: 100%;
+
+    min-height: 590px;
+
+    padding: 18px 24px 38px;
+
+    background-color: var(--color-surface);
+
+    border-radius: 2px;
+
+    display: flex;
+    flex-direction: column;
+
+    
+}
+
+.form-title {
+    text-align: center;
+
+    font-size: 21px;
+    font-weight: 400;
+
+    margin-bottom: 34px;
+}
+
+
+/* =========================
+   FORMULÁRIO
+========================= */
+
+.resource-form {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 23px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+
+    margin-bottom: 1px;
+}
+
+
+/* =========================
+   CAMPOS
+========================= */
+
+.form-control {
+    width: 100%;
+
+    min-height: 44px;
+
+    padding: 11px 13px;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+
+    background-color: #fffafa;
+
+    color: var(--color-text);
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background-color var(--transition);
+}
+
+.form-control::placeholder {
+    color: #777777;
+}
+
+
+/* Foco */
+
+.form-control:focus {
+    border-color: var(--color-primary);
+
+    background-color: #ffffff;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(0, 30, 43, 0.08);
+}
+
+
+/* Textarea */
+
+.form-textarea {
+    height: 100px;
+
+    resize: vertical;
+
+    min-height: 100px;
+    max-height: 220px;
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
+.button {
+    width: 100%;
+
+    min-height: 45px;
+
+    padding: 10px 20px;
+
+    border: none;
+    border-radius: 6px;
+
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background-color var(--transition),
+        transform var(--transition),
+        opacity var(--transition);
+}
+
+
+/* Botão principal */
+
+.button-primary {
+    margin-top: auto;
+
+    background-color: var(--color-primary);
+
+    color: #ffffff;
+}
+
+.button-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.button-primary:active {
+    transform: scale(0.99);
+}
+
+
+/* Botão desabilitado */
+
+.button:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.55;
+}
+
+
+/* =========================
+   FEEDBACK
+========================= */
+
+.form-message {
+    display: none;
+
+    padding: 10px 12px;
+
+    margin-bottom: 15px;
+
+    border-radius: var(--border-radius);
+
+    font-size: 13px;
+}
+
+
+/* Pode adicionar a classe .show
+   quando quiser exibir a mensagem */
+
+.form-message.show {
+    display: block;
+}
+
+
+/* Sucesso */
+
+.form-message.success {
+    color: var(--color-success);
+    background-color: var(--color-success-background);
+}
+
+
+/* Erro */
+
+.form-message.error {
+    color: var(--color-error);
+    background-color: var(--color-error-background);
+}
+
+
+/* =========================
+   CLASSES REUTILIZÁVEIS
+========================= */
+
+.status {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-active {
+    background-color: #e7f7ed;
+    color: #18733d;
+}
+
+.status-inactive {
+    background-color: #eeeeee;
+    color: #555555;
+}
+
+.status-maintenance {
+    background-color: #fff3d6;
+    color: #9a6500;
+}
+
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 600px) {
+
+    .page-container {
+        padding: 22px 24px 32px;
+    }
+
+    .logo {
+        font-size: 31px;
+    }
+
+    .form-card {
+        min-height: calc(100vh - 118px);
+
+        padding-left: 23px;
+        padding-right: 23px;
+    }
+
+}
+
+
+@media (max-width: 360px) {
+
+    .page-container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .form-card {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+}

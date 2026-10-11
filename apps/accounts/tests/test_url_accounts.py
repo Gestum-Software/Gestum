@@ -2,11 +2,13 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import resolve, reverse
 
-from apps.accounts.views import (
+from apps.accounts.views.authentication import AccountsLoginView
+from apps.accounts.views.users import (
     AccountsDeleteView,
     AccountsListView,
     AccountsWithGroupsCreateView,
 )
+from apps.accounts.views.setup import InitialAdminCreateView
 
 
 User = get_user_model()
@@ -25,6 +27,8 @@ class AccountsUrlTest(TestCase):
         expected_urls = {
             "accounts_list": ("/usuarios/", {}),
             "accounts_create": ("/usuarios/create/", {}),
+            "accounts_initial_admin_create": ("/usuarios/create-initial-admin/", {}),
+            "accounts_login": ("/usuarios/login/", {}),
             "accounts_delete": (
                 f"/usuarios/delete/{self.user.username}",
                 {"username": self.user.username},
@@ -42,6 +46,8 @@ class AccountsUrlTest(TestCase):
         expected_views = {
             "accounts_list": AccountsListView,
             "accounts_create": AccountsWithGroupsCreateView,
+            "accounts_initial_admin_create": InitialAdminCreateView,
+            "accounts_login": AccountsLoginView,
             "accounts_delete": AccountsDeleteView,
         }
 
@@ -63,6 +69,8 @@ class AccountsUrlTest(TestCase):
         url_kwargs = {
             "accounts_list": {},
             "accounts_create": {},
+            "accounts_initial_admin_create": {},
+            "accounts_login": {},
             "accounts_delete": {"username": self.user.username},
         }
 
