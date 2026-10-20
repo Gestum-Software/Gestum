@@ -122,7 +122,7 @@ class CustomUserCreationFormTest(TestCase):
 
         self.assertEqual(
             list(form.fields),
-            ["username", "password", "password1", "password2"],
+            ["username", "password1", "password2"],
         )
 
     def test_form_uses_expected_widgets_and_attributes(self):
@@ -171,14 +171,13 @@ class CustomUserCreationFormTest(TestCase):
         form = CustomUserCreationForm(
             data=self.valid_form_data(
                 username="",
-                password="",
                 password1="",
                 password2="",
             ),
         )
 
         self.assertFalse(form.is_valid())
-        for field_name in ("username", "password", "password1", "password2"):
+        for field_name in ("username", "password1", "password2"):
             with self.subTest(field=field_name):
                 self.assertIn(field_name, form.errors)
                 self.assertEqual(
