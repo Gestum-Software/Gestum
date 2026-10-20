@@ -14,14 +14,24 @@ class CustomUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.fields['password1'].help_text = None
+        self.fields['password2'].help_text = None
+        self.fields['username'].help_text = None
+
         self.fields['username'].widget.attrs.update({
             'class': 'campo-nome',
             'placeholder': 'Digite o nome'
         })
-        self.fields['password'].widget.attrs.update({
+        self.fields['password1'].widget.attrs.update({
             'class': 'campo-senha',
             'placeholder': 'Digite a senha'
         })
+        self.fields['password2'].widget.attrs.update({
+            'class': 'campo-senha',
+            'placeholder': 'Digite a senha'
+        })
+
 
 
 class CustomUserWithGroupsCreationForm(CustomUserCreationForm):
