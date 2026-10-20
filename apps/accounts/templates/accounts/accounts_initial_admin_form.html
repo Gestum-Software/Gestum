@@ -13,20 +13,20 @@
 </head>
 <body>
     <main>
-        <section id="signup-modal">
+        <div id="signup-modal">
             <h1 class="modal-title">Sign Up</h1>
             <div class="container-form">
-                <form action="" method="POST">
+                <form class="form" action="" method="POST">
                     {% csrf_token %}
                     {{ form.as_div }}
 
-                    <button type="submit">
+                    <button class="form-button" type="submit">
                         Enviar
-                        <i class="fa-regular fa-paper-plane fa-xl"></i>
+                        <i class="fa-regular fa-paper-plane"></i>
                     </button>
                 </form>
             </div>
-        </section>
+        </div>
     </main>
 </body>
 </html>
