@@ -130,7 +130,6 @@ class CustomUserCreationFormTest(TestCase):
 
         self.assertIsInstance(form.fields["username"].widget, forms.TextInput)
         self.assertEqual(
-            form.fields["username"].widget.attrs,
             {
                 "maxlength": "150",
                 "autocapitalize": "none",
@@ -139,11 +138,20 @@ class CustomUserCreationFormTest(TestCase):
                 "class": "campo-nome",
                 "placeholder": "Digite o nome",
             },
+            form.fields["username"].widget.attrs,
         )
         self.assertEqual(
-            form.fields["password"].widget.attrs,
+            form.fields["password1"].widget.attrs,
             {
-                "maxlength": "128",
+                "autocomplete": "new-password",
+                "class": "campo-senha",
+                "placeholder": "Digite a senha",
+            },
+        )
+        self.assertEqual(
+            form.fields["password2"].widget.attrs,
+            {
+                "autocomplete": "new-password",
                 "class": "campo-senha",
                 "placeholder": "Digite a senha",
             },
