@@ -218,20 +218,17 @@ class CustomUserWithGroupsCreationFormTest(TestCase):
             "password": "SenhaSegura123!",
             "password1": "SenhaSegura123!",
             "password2": "SenhaSegura123!",
-            "groups": [
-                self.administrator_group.pk,
-                self.support_group.pk,
-            ],
+            "groups": self.administrator_group.pk,
         }
         data.update(overrides)
         return data
 
-    def test_form_declares_groups_as_multiple_choice_checkbox_field(self):
+    def test_form_declares_groups_as_single_choice_select_field(self):
         form = CustomUserWithGroupsCreationForm()
         field = form.fields["groups"]
 
-        self.assertIsInstance(field, forms.ModelMultipleChoiceField)
-        self.assertIsInstance(field.widget, forms.CheckboxSelectMultiple)
+        self.assertIsInstance(field, forms.ModelChoiceField)
+        self.assertIsInstance(field.widget, forms.Select)
         self.assertEqual(field.label, "Selecione os perfis")
         self.assertEqual(field.widget.attrs, {"class": "campo-grupo"})
 
@@ -243,7 +240,7 @@ class CustomUserWithGroupsCreationFormTest(TestCase):
 
         self.assertEqual(
             set(user.groups.values_list("pk", flat=True)),
-            {self.administrator_group.pk, self.support_group.pk},
+            {self.administrator_group.pk},
         )
 
     def test_form_requires_at_least_one_group(self):
@@ -269,5 +266,5 @@ class CustomUserWithGroupsCreationFormTest(TestCase):
 
         self.assertEqual(
             set(user.groups.values_list("pk", flat=True)),
-            {self.administrator_group.pk, self.support_group.pk},
+            {self.administrator_group.pk},
         )

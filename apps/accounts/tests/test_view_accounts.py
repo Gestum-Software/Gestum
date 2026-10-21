@@ -104,7 +104,7 @@ class AccountsViewTest(TestCase):
             "password": "OutraSenha123!",
             "password1": "OutraSenha123!",
             "password2": "OutraSenha123!",
-            "groups": [str(self.group.pk)],
+            "groups": str(self.group.pk),
         }
 
         response = self.client.post(
