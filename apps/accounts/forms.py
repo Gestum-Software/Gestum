@@ -42,10 +42,10 @@ class CustomUserCreationForm(UserCreationForm):
 
 class CustomUserWithGroupsCreationForm(CustomUserCreationForm):
 
-    groups = forms.ModelMultipleChoiceField(
+    groups = forms.ModelChoiceField(
         queryset=Group.objects.all(),
         required=True,
-        widget=forms.CheckboxSelectMultiple(attrs={
+        widget=forms.Select(attrs={
             'class': 'campo-grupo'
         }),
         label='Selecione os perfis',
@@ -54,13 +54,13 @@ class CustomUserWithGroupsCreationForm(CustomUserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=commit)
         if commit:
-            user.groups.set(self.cleaned_data['groups'])
+            user.groups.set([self.cleaned_data['groups']])
         else:
             old_save_m2m = self.save_m2m
 
             def new_save_m2m():
                 old_save_m2m()
-                user.groups.set(self.cleaned_data['groups'])
+                user.groups.set([self.cleaned_data['groups']])
             self.save_m2m = new_save_m2m
         return user
 
