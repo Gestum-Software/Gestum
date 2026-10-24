@@ -1,46 +1,82 @@
 @import "../../css/base.css";
-body {
-    background-color: var(--background);
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
 }
-.page {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 16px;
+
+main {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    align-items: center;
+    padding: 0rem 4rem;
 }
 
-/* Botões */
-.btn {
-    display: block;
-    padding: 12px 16px;
-    border-radius: 8px;
-    text-align: center;
+.btn-criar-recurso {
     text-decoration: none;
-    font-weight: 600;
+    color: var(--white-text);
+    background-color: var(--primary);
+    border-radius: .5rem;
+    padding: .75rem 6rem;
+    transition: transform .3s ease;
+    display: inline-block;
 }
-.btn--primary { background: #d4d4d4; color: #111; }
-.btn--outline { background: #fff; border: 1px solid #ddd; color: #111; font-size: 0.9rem; }
 
-/* Cards */
-.card-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
-.card { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 12px; }
-.card__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.card__title { font-size: 1rem; margin: 0; }
-.card__text { margin: 0 0 12px; font-size: 0.85rem; color: #666; }
-.card__icons { display: flex; gap: 6px; }
-.card__actions { display: flex; flex-direction: column; gap: 8px; }
-.icon-btn { padding: 6px; border-radius: 6px; background: #f3f3f3; text-decoration: none; }
+.recurso {
+    background-color: var(--surface);
+    border-radius: 0.75rem;
+    border: solid 1px var(--border);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    color: var(--text-primary);
+    max-width: 30rem;
+}
 
-/* Status (os nomes batem com os valores do model) */
-.status { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px; }
-.status--disponivel { background: #d1fae5; color: #065f46; }
-.status--manutencao { background: #fef3c7; color: #92400e; }
+.recurso-header {
+    display: flex;
+    justify-content: space-between;
+}
 
-.empty { text-align: center; color: #777; padding: 24px; }
+.recurso-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
 
-@media (min-width: 768px) {
-    .page { max-width: 960px; }
-    .card-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.recurso-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .5rem;
+    border: solid 1px var(--border);
+    width: 100%;
+    padding: .5rem;
+    background-color: var(--background);
+}
+
+.recurso-actions a {
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.container-recursos {
+    width: 100%;
+    max-width: 30rem;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.edit-delete a {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .5rem;
+    text-decoration: none;
+    display: inline-block;
 }
