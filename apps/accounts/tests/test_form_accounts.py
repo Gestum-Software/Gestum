@@ -122,7 +122,7 @@ class CustomUserCreationFormTest(TestCase):
 
         self.assertEqual(
             list(form.fields),
-            ["username", "password", "password1", "password2"],
+            ["username", "password1", "password2"],
         )
 
     def test_form_uses_expected_widgets_and_attributes(self):
@@ -130,7 +130,6 @@ class CustomUserCreationFormTest(TestCase):
 
         self.assertIsInstance(form.fields["username"].widget, forms.TextInput)
         self.assertEqual(
-            form.fields["username"].widget.attrs,
             {
                 "maxlength": "150",
                 "autocapitalize": "none",
@@ -139,11 +138,20 @@ class CustomUserCreationFormTest(TestCase):
                 "class": "campo-nome",
                 "placeholder": "Digite o nome",
             },
+            form.fields["username"].widget.attrs,
         )
         self.assertEqual(
-            form.fields["password"].widget.attrs,
+            form.fields["password1"].widget.attrs,
             {
-                "maxlength": "128",
+                "autocomplete": "new-password",
+                "class": "campo-senha",
+                "placeholder": "Digite a senha",
+            },
+        )
+        self.assertEqual(
+            form.fields["password2"].widget.attrs,
+            {
+                "autocomplete": "new-password",
                 "class": "campo-senha",
                 "placeholder": "Digite a senha",
             },
@@ -163,14 +171,13 @@ class CustomUserCreationFormTest(TestCase):
         form = CustomUserCreationForm(
             data=self.valid_form_data(
                 username="",
-                password="",
                 password1="",
                 password2="",
             ),
         )
 
         self.assertFalse(form.is_valid())
-        for field_name in ("username", "password", "password1", "password2"):
+        for field_name in ("username", "password1", "password2"):
             with self.subTest(field=field_name):
                 self.assertIn(field_name, form.errors)
                 self.assertEqual(
@@ -211,20 +218,17 @@ class CustomUserWithGroupsCreationFormTest(TestCase):
             "password": "SenhaSegura123!",
             "password1": "SenhaSegura123!",
             "password2": "SenhaSegura123!",
-            "groups": [
-                self.administrator_group.pk,
-                self.support_group.pk,
-            ],
+            "groups": self.administrator_group.pk,
         }
         data.update(overrides)
         return data
 
-    def test_form_declares_groups_as_multiple_choice_checkbox_field(self):
+    def test_form_declares_groups_as_single_choice_select_field(self):
         form = CustomUserWithGroupsCreationForm()
         field = form.fields["groups"]
 
-        self.assertIsInstance(field, forms.ModelMultipleChoiceField)
-        self.assertIsInstance(field.widget, forms.CheckboxSelectMultiple)
+        self.assertIsInstance(field, forms.ModelChoiceField)
+        self.assertIsInstance(field.widget, forms.Select)
         self.assertEqual(field.label, "Selecione os perfis")
         self.assertEqual(field.widget.attrs, {"class": "campo-grupo"})
 
@@ -236,7 +240,7 @@ class CustomUserWithGroupsCreationFormTest(TestCase):
 
         self.assertEqual(
             set(user.groups.values_list("pk", flat=True)),
-            {self.administrator_group.pk, self.support_group.pk},
+            {self.administrator_group.pk},
         )
 
     def test_form_requires_at_least_one_group(self):
@@ -262,5 +266,5 @@ class CustomUserWithGroupsCreationFormTest(TestCase):
 
         self.assertEqual(
             set(user.groups.values_list("pk", flat=True)),
-            {self.administrator_group.pk, self.support_group.pk},
+            {self.administrator_group.pk},
         )

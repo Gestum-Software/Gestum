@@ -1,0 +1,32 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <link rel="stylesheet" href="{% static 'accounts/css/accounts_initial_admin_form.css' %}">
+    
+    <title>Gestum - Initial Setup</title>
+</head>
+<body>
+    <main>
+        <div id="signup-modal">
+            <h1 class="modal-title">Sign Up</h1>
+            <div class="container-form">
+                <form class="form" action="" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_div }}
+
+                    <button class="form-button" type="submit">
+                        Enviar
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

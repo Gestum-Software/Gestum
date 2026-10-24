@@ -10,15 +10,31 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ['username', 'password']
+        fields = ['username', 'password1', 'password2']
+
+        labels = {
+            'username': 'Nome',
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.fields['username'].help_text = None
+        self.fields['password1'].help_text = None
+        self.fields['password2'].help_text = None
+
+        self.fields['password1'].label = 'Senha'
+        self.fields['password2'].label = 'Repita sua senha'
+
         self.fields['username'].widget.attrs.update({
             'class': 'campo-nome',
             'placeholder': 'Digite o nome'
         })
-        self.fields['password'].widget.attrs.update({
+        self.fields['password1'].widget.attrs.update({
+            'class': 'campo-senha',
+            'placeholder': 'Digite a senha'
+        })
+        self.fields['password2'].widget.attrs.update({
             'class': 'campo-senha',
             'placeholder': 'Digite a senha'
         })
@@ -26,10 +42,10 @@ class CustomUserCreationForm(UserCreationForm):
 
 class CustomUserWithGroupsCreationForm(CustomUserCreationForm):
 
-    groups = forms.ModelMultipleChoiceField(
+    groups = forms.ModelChoiceField(
         queryset=Group.objects.all(),
         required=True,
-        widget=forms.CheckboxSelectMultiple(attrs={
+        widget=forms.Select(attrs={
             'class': 'campo-grupo'
         }),
         label='Selecione os perfis',
@@ -38,13 +54,13 @@ class CustomUserWithGroupsCreationForm(CustomUserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=commit)
         if commit:
-            user.groups.set(self.cleaned_data['groups'])
+            user.groups.set([self.cleaned_data['groups']])
         else:
             old_save_m2m = self.save_m2m
 
             def new_save_m2m():
                 old_save_m2m()
-                user.groups.set(self.cleaned_data['groups'])
+                user.groups.set([self.cleaned_data['groups']])
             self.save_m2m = new_save_m2m
         return user
 
