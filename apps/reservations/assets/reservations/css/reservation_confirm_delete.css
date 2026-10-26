@@ -1,0 +1,70 @@
+@import '../../css/base.css';
+
+header {
+    height: 72px;
+    display: flex;
+    align-items: center;
+    padding: 0 8%;
+    background: var(--surface);
+}
+
+.logo-placeholder {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+main {
+    min-height: calc(100vh - 72px);
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+.modal {
+    width: min(100%, 440px);
+    padding: 32px;
+    background: var(--surface);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgb(0 0 0 / 12%);
+}
+
+h1 {
+    margin: 0 0 12px;
+    font-size: 1.5rem;
+}
+
+.message {
+    margin: 0 0 24px;
+    line-height: 1.6;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.button {
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 6px;
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.cancel {
+    color: var(--white-text);
+    background: var(--primary);
+}
+
+.delete {
+    color: var(--white-text);
+    background: var(--danger);
+}
+
+.button:focus-visible {
+    outline: 3px solid var(--border);
+    outline-offset: 2px;
+}
