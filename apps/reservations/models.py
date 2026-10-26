@@ -26,3 +26,6 @@ class Reservation(models.Model):
             raise ValidationError(
                 "A data de término deve ser posterior à data de início."
             )
+
+    def __str__(self):
+        return f"{self.titulo}"
