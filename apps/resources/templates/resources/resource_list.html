@@ -6,50 +6,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'resources/css/resource_list.css' %}">
-    <title>Recursos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <title>Gestum - Recursos</title>
 </head>
 
 <body>
-    <main class="page">
+    <header>
+        <div>
+            <span>Logo Gestum</span>
+        </div>
+        <div>
+            <a href="{% url 'core:home' %}" class="link-voltar"><i class="fa-regular fa-circle-left fa-2xl" style="color: #6b3030;"></i></a>
+        </div>
+    </header>
 
-        {% if perms.resources.add_resource %}
-        <a href="{% url 'resource:resource_create' %}" class="btn btn--primary">Criar recurso</a>
-        {% endif %}
+    <main>
+        <div class="container-btn-criar">
+            <a class="btn-criar-recurso" href="{% url 'resource:resource_create' %}">Criar recurso</a>
+        </div>
 
-        <ul class="card-list">
-            {% for resource in object_list %}
-            <li class="card">
-                <div class="card__header">
-                    <h2 class="card__title">
-                        <a href="{% url 'resource:resource_detail' resource.nome %}">{{ resource.nome }}</a>
-                    </h2>
+        <div class="container-recursos">
+            {% for recurso in object_list %}
+                <div class="recurso">
+                    <div class="recurso-header">
+                        <h2>{{ recurso.nome }}</h2>
 
-                    <div class="card__icons">
-                        {% if perms.resources.change_resource %}
-                        <a href="{% url 'resource:resource_update' resource.nome %}" class="icon-btn" aria-label="Editar">✏️</a>
-                        {% endif %}
-                        {% if perms.resources.delete_resource %}
-                        <a href="{% url 'resource:resource_delete' resource.nome %}" class="icon-btn" aria-label="Excluir">🗑️</a>
-                        {% endif %}
+                        <div class="edit-delete">
+                            <a href="{% url 'resource:resource_update' recurso.nome %}">
+                                <i class="fa-solid fa-pen-to-square fa-lg" style="color: #692f2f;"></i>
+                            </a>
+                            <a href="{% url 'resource:resource_delete' recurso.nome %}">
+                                <i class="fa-solid fa-trash" style="color: #bd180f;"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="recurso-actions">
+                        <a href="{% url 'tickets:ticket_create' %}" class="recurso-action">
+                            <i class="fa-solid fa-triangle-exclamation" style="color: #bd180f;"></i>
+                            Abrir chamado
+                        </a>
+
+                        <a href="{% url 'reservations:reservation_create' %}" class="recurso-action">
+                            <i class="fa-solid fa-calendar" style="color: #6b3030;"></i>
+                            Reservar recurso
+                        </a>
+
+                        <div class="recurso-action">
+                            <i class="fa-solid fa-circle-check fa-lg" style="color: #2ba84a;"></i>
+                            {{ recurso.status }}
+                        </div>
                     </div>
                 </div>
-
-                <span class="status status--{{ resource.status }}">{{ resource.get_status_display }}</span>
-
-                {% if resource.observacoes %}
-                <p class="card__text">{{ resource.observacoes|truncatechars:100 }}</p>
-                {% endif %}
-
-                <div class="card__actions">
-                    <a href="#" class="btn btn--outline">Abrir Chamado</a>
-                    <a href="#" class="btn btn--outline">Reservar Recurso</a>
-                </div>
-            </li>
             {% empty %}
-            <li class="empty">Nenhum recurso cadastrado.</li>
+                <div>
+                    <h2>Não foi possível encontrar nenhum usuario!</h2>
+                </div>
             {% endfor %}
-        </ul>
-
+        </div>
     </main>
 </body>
 
