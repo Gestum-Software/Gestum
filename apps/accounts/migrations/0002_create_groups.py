@@ -35,12 +35,30 @@ def create_groups_and_permissions(apps, schema_editor):
     delete_ticket = get_permission("delete_ticket", "Can delete ticket")
     view_ticket = get_permission("view_ticket", "Can view ticket")
 
+    # Permissões nativas do model Reservation
+    add_reservation = get_permission(
+        "add_reservation", "Can add reservation"
+    )
+    change_reservation = get_permission(
+        "change_reservation", "Can change reservation"
+    )
+    delete_reservation = get_permission(
+        "delete_reservation", "Can delete reservation"
+    )
+    view_reservation = get_permission(
+        "view_reservation", "Can view reservation"
+    )
+
     # Usuário
     usuario.permissions.add(
         view_resource,
         add_ticket,
         change_ticket,
         view_ticket,
+        add_reservation,
+        change_reservation,
+        delete_reservation,
+        view_reservation,
     )
 
     # Técnico
@@ -51,6 +69,7 @@ def create_groups_and_permissions(apps, schema_editor):
         add_ticket,
         change_ticket,
         view_ticket,
+        view_reservation,
     )
 
     # Administrador
@@ -63,6 +82,10 @@ def create_groups_and_permissions(apps, schema_editor):
         change_ticket,
         view_ticket,
         delete_ticket,
+        add_reservation,
+        change_reservation,
+        delete_reservation,
+        view_reservation,
     )
 
 
