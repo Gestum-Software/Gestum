@@ -29,14 +29,28 @@ def create_groups_and_permissions(apps, schema_editor):
     delete_resource = get_permission("delete_resource", "Can delete resource")
     view_resource = get_permission("view_resource", "Can view resource")
 
+    # Permissões nativas do model Ticket
+    add_ticket = get_permission("add_ticket", "Can add ticket")
+    change_ticket = get_permission("change_ticket", "Can change ticket")
+    delete_ticket = get_permission("delete_ticket", "Can delete ticket")
+    view_ticket = get_permission("view_ticket", "Can view ticket")
+
     # Usuário
-    usuario.permissions.add(view_resource)
+    usuario.permissions.add(
+        view_resource,
+        add_ticket,
+        change_ticket,
+        view_ticket,
+    )
 
     # Técnico
     tecnico.permissions.add(
         view_resource,
         add_resource,
         change_resource,
+        add_ticket,
+        change_ticket,
+        view_ticket,
     )
 
     # Administrador
@@ -45,6 +59,10 @@ def create_groups_and_permissions(apps, schema_editor):
         add_resource,
         change_resource,
         delete_resource,
+        add_ticket,
+        change_ticket,
+        view_ticket,
+        delete_ticket,
     )
 
 
