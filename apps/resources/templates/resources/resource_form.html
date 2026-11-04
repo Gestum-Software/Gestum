@@ -1,96 +1,43 @@
 {% load static %}
-<!DOCTYPE html>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Criar Recurso | Gestum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="{% static 'resources/css/resource_form.css' %}">
+
+    <title>Gestum - Criar recurso</title>
 </head>
-
 <body>
-
-    <main class="page-container">
-
-        <!-- Cabeçalho -->
-        <header class="page-header">
-
-            <h1 class="logo">Gestum</h1>
-
-            <a href="#" class="back-button" aria-label="Voltar">
-                <span class="arrow"></span>
+    <header>
+        <div>
+            <span>Logo Gestum</span>
+        </div>
+        <div>
+            <a href="{% url 'resource:resource_list' %}" class="link-voltar">
+                <i class="fa-regular fa-circle-left fa-2xl" style="color: #6b3030;"></i>
             </a>
+        </div>
+    </header>
 
-        </header>
+    <main>
+        <div id="form-modal">
+            <h1>Criar recurso</h1>
 
+            <div class="container-form">
+                <form class="form" action="" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_div }}
 
-        <!-- Formulário -->
-        <section class="form-card">
-
-            <h2 class="form-title">
-                Criar recurso
-            </h2>
-
-            <form class="resource-form">
-
-                <!-- Nome -->
-                <div class="form-group">
-
-                    <label for="nome">
-                        Nome:
-                    </label>
-
-                    <input
-                        type="text"
-                        id="nome"
-                        name="nome"
-                        class="form-control"
-                        placeholder="Nome do recurso"
-                        required
-                    >
-
-                </div>
-
-
-                <!-- Observações -->
-                <div class="form-group">
-
-                    <label for="observacoes">
-                        Observações:
-                    </label>
-
-                    <textarea
-                        id="observacoes"
-                        name="observacoes"
-                        class="form-control form-textarea"
-                        placeholder="Observações sobre o recurso"
-                    ></textarea>
-
-                </div>
-
-
-                <!-- Área de feedback -->
-                <div class="form-message success">
-                    Recurso criado com sucesso.
-                </div>
-
-
-                <!-- Botão -->
-                <button
-                    type="submit"
-                    class="button button-primary"
-                >
-                    Criar
-                </button>
-
-            </form>
-
-        </section>
-
+                    <button class="form-button" type="submit">
+                        Criar
+                    </button>
+                </form>
+            </div>
+        </div>
     </main>
-
 </body>
 </html>
