@@ -16,4 +16,4 @@ class Resource(models.Model):
     )
 
     def __str__(self):
-        return f"{self.nome} | ({self.status})"
+        return f"{self.nome}"

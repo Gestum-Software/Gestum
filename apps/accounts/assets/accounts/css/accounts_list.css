@@ -1,0 +1,74 @@
+@import '../../css/base.css';
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0rem 4rem;
+}
+
+.users-list {
+    width: 100%;
+    max-width: 30rem;
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.user {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-radius: .75rem;
+    border: solid 1px var(--border);
+    background-color: var(--surface);
+    gap: 1rem;
+    width: 100%;
+}
+
+.user-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background);
+    justify-content: center;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border: solid 1px var(--border);
+    border-radius: .5rem;
+    padding: .5rem;
+    width: 100%;
+    transition: .35s;
+}
+
+.user-actions {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.btn-criar-usuario {
+    text-decoration: none;
+    color: var(--white-text);
+    background-color: var(--primary);
+    border-radius: .5rem;
+    padding: .75rem 6rem;
+    transition: transform .3s ease;
+    display: inline-block;
+}
+
+.btn-criar-usuario:hover {
+    transform: scale(1.05);
+}
+
+.user-action:hover {
+    background-color: var(--surface);
+}

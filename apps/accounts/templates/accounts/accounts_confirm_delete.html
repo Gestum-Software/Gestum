@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'accounts/css/accounts_confirm_delete.css' %}">
+    
+	<title>Confirmar exclusão</title>
+    
+</head>
+<body>
+	<header>
+		<div class="logo-placeholder">Sua logo</div>
+	</header>
+	<main>
+		<section class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+			<h1 id="confirm-title">Confirmar exclusão</h1>
+			<p class="message">Tem certeza de que deseja excluir “{{ object }}”? Esta ação não pode ser desfeita.</p>
+			<form method="post">
+				{% csrf_token %}
+				<div class="actions">
+					<a class="button cancel" href="{% url 'accounts:accounts_list' %}">Cancelar</a>
+					<button class="button delete" type="submit">Excluir</button>
+				</div>
+			</form>
+		</section>
+	</main>
+</body>
+</html>

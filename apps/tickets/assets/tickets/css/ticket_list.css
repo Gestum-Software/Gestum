@@ -61,3 +61,13 @@ main {
     flex-direction: column;
     gap: 2rem;
 }
+
+
+.b-edit-delete a {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .5rem;
+    text-decoration: none;
+    display: inline-block;
+}

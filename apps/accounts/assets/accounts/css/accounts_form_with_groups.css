@@ -1,0 +1,62 @@
+@import '../../css/base.css';
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#form-modal {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background-color: var(--surface);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.form div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form div input {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem;
+
+}
+
+.form div select {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: .5rem 1rem;
+}
+
+.form-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .5rem;
+    width: 100%;
+    background-color: var(--primary);
+    color: var(--white-text);
+    gap: .5rem;
+    border-radius: 8px;
+}

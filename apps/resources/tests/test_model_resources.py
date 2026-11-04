@@ -54,7 +54,7 @@ class ResourcesModelTest(TestCase):
             status=Resource.StatusChoices.EM_MANUTENCAO,
         )
 
-        self.assertEqual(str(resource), "Projetor | (manutencao)")
+        self.assertEqual(str(resource), "Projetor")
 
     def test_model_field_configuration(self):
         nome = Resource._meta.get_field("nome")
