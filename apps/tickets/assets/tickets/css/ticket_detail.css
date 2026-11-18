@@ -1,0 +1,59 @@
+@import '../../css/base.css';
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 80vh;
+}
+
+#ticket-modal {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background-color: var(--surface);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.back-button {
+    background-color: var(--primary);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0rem;
+    text-decoration: none;
+    color: var(--white-text);
+}
+
+.container-ticket-data {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.data {
+    display: flex;
+    justify-content: flex-start;
+    padding: .75rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background-color: var(--background);
+}
+
+.description-data {
+    padding-bottom: 2.5rem;
+}
