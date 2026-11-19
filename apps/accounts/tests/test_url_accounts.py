@@ -25,12 +25,12 @@ class AccountsUrlTest(TestCase):
 
     def test_account_urls_reverse_to_expected_paths(self):
         expected_urls = {
-            "accounts_list": ("/usuarios/", {}),
-            "accounts_create": ("/usuarios/create/", {}),
-            "accounts_initial_admin_create": ("/usuarios/create-initial-admin/", {}),
-            "accounts_login": ("/usuarios/login/", {}),
+            "accounts_list": ("/accounts/", {}),
+            "accounts_create": ("/accounts/create/", {}),
+            "accounts_initial_admin_create": ("/accounts/create-initial-admin/", {}),
+            "accounts_login": ("/accounts/login/", {}),
             "accounts_delete": (
-                f"/usuarios/delete/{self.user.username}",
+                f"/accounts/delete/{self.user.username}",
                 {"username": self.user.username},
             ),
         }

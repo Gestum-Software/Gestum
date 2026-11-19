@@ -18,7 +18,7 @@ class AccountsListView(ListView):
 class AccountsWithGroupsCreateView(CreateView):
     model = User
     form_class = CustomUserWithGroupsCreationForm
-    success_url = '/usuarios/'
+    success_url = '/accounts/'
     template_name = 'accounts/accounts_form_with_groups.html'
 
 
