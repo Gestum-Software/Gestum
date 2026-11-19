@@ -84,6 +84,28 @@ class AccountsViewTest(TestCase):
         )
         self.assertEqual(int(self.client.session["_auth_user_id"]), self.user.pk)
 
+    def test_logout_view_post_logs_out_user_and_redirects(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(reverse("accounts:accounts_logout"))
+
+        self.assertRedirects(
+            response,
+            reverse("accounts:accounts_login"),
+            fetch_redirect_response=False,
+        )
+        self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_logout_view_requires_authenticated_user(self):
+        response = self.client.post(reverse("accounts:accounts_logout"))
+
+        self.assertRedirects(
+            response,
+            f"{reverse('accounts:accounts_login')}?next="
+            f"{reverse('accounts:accounts_logout')}",
+            fetch_redirect_response=False,
+        )
+
     def test_create_view_get_displays_form(self):
         response = self.client.get(reverse("accounts:accounts_create"))
 
