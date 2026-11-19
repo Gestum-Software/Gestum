@@ -9,6 +9,7 @@ from .views.setup import (
 )
 from .views.authentication import (
     AccountsLoginView,
+    AccountsLogoutView,
 )
 
 app_name = 'accounts'
@@ -44,4 +45,10 @@ urlpatterns = [
         AccountsLoginView.as_view(),
         name='accounts_login',
     ),
+
+    path(
+        'logout/',
+        AccountsLogoutView.as_view(),
+        name='accounts_logout',
+    )
 ]
