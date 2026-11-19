@@ -29,6 +29,24 @@
         </section>
     </main>
 
-    <aside class="dashboard-settings-panel" aria-label="Painel lateral de configurações"></aside>
+    <aside class="dashboard-settings-painel" aria-label="Painel lateral de configurações">
+        <div class="superior-part">
+            <div class="username-mensage">
+                <h1>Olá {{ username }}!</h1>
+            </div>
+            <a class="edit-profile" href="#">
+                Editar perfil
+            </a>
+        </div>
+
+        <div>
+            {% if user.is_authenticated %}
+            <form method="post" action="">
+                {% csrf_token %}
+                <button class="logout-btn" type="submit">Sair</button>
+            </form>
+            {% endif %}
+        </div>        
+    </aside>
 </body>
 </html>
