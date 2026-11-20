@@ -72,7 +72,6 @@ class AccountsUrlTest(TestCase):
         url_kwargs = {
             "accounts_list": {},
             "accounts_create": {},
-            "accounts_initial_admin_create": {},
             "accounts_delete": {"username": self.user.username},
         }
 
