@@ -21,6 +21,19 @@ class DashboardViewTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "core/dashboard.html")
+        self.assertEqual(response.context["username"], self.user.username)
+
+    def test_home_view_requires_authentication(self):
+        self.client.logout()
+
+        response = self.client.get(reverse("core:home"))
+
+        login_url = reverse("accounts:accounts_login")
+        self.assertRedirects(
+            response,
+            f"{login_url}?next={reverse('core:home')}",
+            fetch_redirect_response=False,
+        )
 
     def test_home_url_uses_dashboard_view(self):
         response = self.client.get(reverse("core:home"))
