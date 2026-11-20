@@ -194,6 +194,9 @@ class AccountsViewTest(TestCase):
         self.assertEqual(User.objects.count(), 1)
 
     def test_initial_admin_view_get_displays_form(self):
+        self.user.delete()
+        self.client.logout()
+
         response = self.client.get(
             reverse("accounts:accounts_initial_admin_create")
         )
@@ -211,6 +214,8 @@ class AccountsViewTest(TestCase):
         self.assertIsNone(response.context["form"].instance.pk)
 
     def test_initial_admin_view_post_creates_admin_and_redirects(self):
+        self.user.delete()
+        self.client.logout()
         account_data = {
             "username": "administrador-inicial",
             "password": "SenhaSegura123!",
@@ -230,6 +235,7 @@ class AccountsViewTest(TestCase):
         self.assertRedirects(
             response,
             reverse("accounts:accounts_list"),
+            fetch_redirect_response=False,
         )
         self.assertTrue(
             created_user.groups.filter(pk=self.admin_group.pk).exists()
@@ -241,6 +247,9 @@ class AccountsViewTest(TestCase):
     def test_initial_admin_view_post_with_invalid_data_does_not_create_account(
         self,
     ):
+        self.user.delete()
+        self.client.logout()
+
         response = self.client.post(
             reverse("accounts:accounts_initial_admin_create"),
             data={
@@ -256,7 +265,27 @@ class AccountsViewTest(TestCase):
             "accounts/accounts_initial_admin_form.html",
         )
         self.assertTrue(response.context["form"].errors)
-        self.assertEqual(User.objects.count(), 1)
+        self.assertEqual(User.objects.count(), 0)
+
+    def test_initial_admin_view_is_not_accessible_after_setup(self):
+        self.user.groups.add(self.admin_group)
+        path = reverse("accounts:accounts_initial_admin_create")
+
+        get_response = self.client.get(path)
+        post_response = self.client.post(
+            path,
+            data={
+                "username": "segundo-administrador",
+                "password1": "SenhaSegura123!",
+                "password2": "SenhaSegura123!",
+            },
+        )
+
+        self.assertEqual(get_response.status_code, 404)
+        self.assertEqual(post_response.status_code, 404)
+        self.assertFalse(
+            User.objects.filter(username="segundo-administrador").exists()
+        )
 
     def test_delete_view_get_displays_confirmation_page(self):
         response = self.client.get(
