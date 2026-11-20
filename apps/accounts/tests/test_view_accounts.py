@@ -1,6 +1,11 @@
+from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.test import TestCase, override_settings
+from django.db import close_old_connections
+from django.test import Client, TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
 
 from apps.accounts.views.authentication import AccountsLoginView
@@ -328,3 +333,50 @@ class AccountsViewTest(TestCase):
         )
 
         self.assertEqual(response.status_code, 404)
+
+
+@override_settings(TEMPLATES=TEMPLATES)
+class InitialAdminSetupConcurrencyTest(TransactionTestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        Group.objects.create(name="admin")
+
+    def test_only_one_concurrent_request_can_create_initial_admin(self):
+        path = reverse("accounts:accounts_initial_admin_create")
+        barrier = Barrier(2)
+        original_post = InitialAdminCreateView.post
+
+        def synchronized_post(view, request, *args, **kwargs):
+            barrier.wait(timeout=10)
+            return original_post(view, request, *args, **kwargs)
+
+        def create_initial_admin(username):
+            close_old_connections()
+            try:
+                return Client().post(
+                    path,
+                    data={
+                        "username": username,
+                        "password1": "SenhaSegura123!",
+                        "password2": "SenhaSegura123!",
+                    },
+                ).status_code
+            finally:
+                close_old_connections()
+
+        with patch.object(
+            InitialAdminCreateView,
+            "post",
+            synchronized_post,
+        ):
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                statuses = list(
+                    executor.map(
+                        create_initial_admin,
+                        ("admin-concorrente-1", "admin-concorrente-2"),
+                    )
+                )
+
+        self.assertCountEqual(statuses, [302, 404])
+        self.assertEqual(User.objects.count(), 1)
