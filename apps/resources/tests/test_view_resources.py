@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
@@ -7,10 +8,17 @@ from apps.resources.models import Resource
 class ResourcesViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
+        cls.user = get_user_model().objects.create_user(
+            username="resource-view-user",
+            password="test-password",
+        )
         cls.resource = Resource.objects.create(
             nome="Projetor",
             observacoes="Projetor disponível para empréstimo.",
         )
+
+    def setUp(self):
+        self.client.force_login(self.user)
 
     def test_list_view_returns_resources(self):
         response = self.client.get(reverse("resource:resource_list"))
@@ -18,6 +26,28 @@ class ResourcesViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "resources/resource_list.html")
         self.assertIn(self.resource, response.context["object_list"])
+
+    def test_views_require_authentication(self):
+        self.client.logout()
+        login_url = reverse("accounts:accounts_login")
+        resource_urls = (
+            ("resource:resource_list", {}),
+            ("resource:resource_create", {}),
+            ("resource:resource_detail", {"nome": self.resource.nome}),
+            ("resource:resource_update", {"nome": self.resource.nome}),
+            ("resource:resource_delete", {"nome": self.resource.nome}),
+        )
+
+        for url_name, kwargs in resource_urls:
+            with self.subTest(url_name=url_name):
+                requested_url = reverse(url_name, kwargs=kwargs)
+                response = self.client.get(requested_url)
+
+                self.assertRedirects(
+                    response,
+                    f"{login_url}?next={requested_url}",
+                    fetch_redirect_response=False,
+                )
 
     def test_create_view_get_displays_form(self):
         response = self.client.get(reverse("resource:resource_create"))
