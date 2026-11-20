@@ -34,6 +34,9 @@ class TicketUrlTest(TestCase):
             resource=cls.resource,
         )
 
+    def setUp(self):
+        self.client.force_login(self.user)
+
     def test_ticket_urls_reverse_to_expected_paths(self):
         expected_urls = {
             "ticket_list": ("/chamados/", {}),
