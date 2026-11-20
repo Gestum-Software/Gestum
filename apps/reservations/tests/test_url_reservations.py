@@ -38,6 +38,9 @@ class ReservationsUrlTest(TestCase):
             resource=cls.resource,
         )
 
+    def setUp(self):
+        self.client.force_login(self.user)
+
     def test_reservation_urls_reverse_to_expected_paths(self):
         expected_urls = {
             "reservation_list": ("/reservas/", {}),

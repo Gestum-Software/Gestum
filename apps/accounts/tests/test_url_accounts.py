@@ -23,6 +23,9 @@ class AccountsUrlTest(TestCase):
             password="SenhaSegura123!",
         )
 
+    def setUp(self):
+        self.client.force_login(self.user)
+
     def test_account_urls_reverse_to_expected_paths(self):
         expected_urls = {
             "accounts_list": ("/accounts/", {}),
@@ -69,8 +72,6 @@ class AccountsUrlTest(TestCase):
         url_kwargs = {
             "accounts_list": {},
             "accounts_create": {},
-            "accounts_initial_admin_create": {},
-            "accounts_login": {},
             "accounts_delete": {"username": self.user.username},
         }
 
@@ -81,3 +82,8 @@ class AccountsUrlTest(TestCase):
                 )
 
                 self.assertEqual(response.status_code, 200)
+
+        self.client.logout()
+        response = self.client.get(reverse("accounts:accounts_login"))
+
+        self.assertEqual(response.status_code, 200)

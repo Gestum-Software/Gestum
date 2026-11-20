@@ -1,6 +1,11 @@
+from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.test import TestCase, override_settings
+from django.db import close_old_connections
+from django.test import Client, TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
 
 from apps.accounts.views.authentication import AccountsLoginView
@@ -47,6 +52,9 @@ class AccountsViewTest(TestCase):
         )
         cls.user.groups.add(cls.group)
 
+    def setUp(self):
+        self.client.force_login(self.user)
+
     def test_list_view_returns_accounts(self):
         response = self.client.get(reverse("accounts:accounts_list"))
 
@@ -58,6 +66,7 @@ class AccountsViewTest(TestCase):
         self.assertIn(self.user, response.context["object_list"])
 
     def test_login_view_get_displays_form(self):
+        self.client.logout()
         response = self.client.get(reverse("accounts:accounts_login"))
 
         self.assertEqual(response.status_code, 200)
@@ -69,6 +78,7 @@ class AccountsViewTest(TestCase):
         self.assertEqual(response.context["form"].initial, {})
 
     def test_login_view_post_authenticates_user_and_redirects(self):
+        self.client.logout()
         response = self.client.post(
             reverse("accounts:accounts_login"),
             data={
@@ -97,6 +107,7 @@ class AccountsViewTest(TestCase):
         self.assertNotIn("_auth_user_id", self.client.session)
 
     def test_logout_view_requires_authenticated_user(self):
+        self.client.logout()
         response = self.client.post(reverse("accounts:accounts_logout"))
 
         self.assertRedirects(
@@ -105,6 +116,27 @@ class AccountsViewTest(TestCase):
             f"{reverse('accounts:accounts_logout')}",
             fetch_redirect_response=False,
         )
+
+    def test_protected_views_require_authenticated_user(self):
+        self.client.logout()
+        protected_paths = (
+            reverse("accounts:accounts_list"),
+            reverse("accounts:accounts_create"),
+            reverse(
+                "accounts:accounts_delete",
+                kwargs={"username": self.user.username},
+            ),
+        )
+
+        for path in protected_paths:
+            with self.subTest(path=path):
+                response = self.client.get(path)
+
+                self.assertRedirects(
+                    response,
+                    f"{reverse('accounts:accounts_login')}?next={path}",
+                    fetch_redirect_response=False,
+                )
 
     def test_create_view_get_displays_form(self):
         response = self.client.get(reverse("accounts:accounts_create"))
@@ -167,6 +199,9 @@ class AccountsViewTest(TestCase):
         self.assertEqual(User.objects.count(), 1)
 
     def test_initial_admin_view_get_displays_form(self):
+        self.user.delete()
+        self.client.logout()
+
         response = self.client.get(
             reverse("accounts:accounts_initial_admin_create")
         )
@@ -184,6 +219,8 @@ class AccountsViewTest(TestCase):
         self.assertIsNone(response.context["form"].instance.pk)
 
     def test_initial_admin_view_post_creates_admin_and_redirects(self):
+        self.user.delete()
+        self.client.logout()
         account_data = {
             "username": "administrador-inicial",
             "password": "SenhaSegura123!",
@@ -203,6 +240,7 @@ class AccountsViewTest(TestCase):
         self.assertRedirects(
             response,
             reverse("accounts:accounts_list"),
+            fetch_redirect_response=False,
         )
         self.assertTrue(
             created_user.groups.filter(pk=self.admin_group.pk).exists()
@@ -214,6 +252,9 @@ class AccountsViewTest(TestCase):
     def test_initial_admin_view_post_with_invalid_data_does_not_create_account(
         self,
     ):
+        self.user.delete()
+        self.client.logout()
+
         response = self.client.post(
             reverse("accounts:accounts_initial_admin_create"),
             data={
@@ -229,7 +270,27 @@ class AccountsViewTest(TestCase):
             "accounts/accounts_initial_admin_form.html",
         )
         self.assertTrue(response.context["form"].errors)
-        self.assertEqual(User.objects.count(), 1)
+        self.assertEqual(User.objects.count(), 0)
+
+    def test_initial_admin_view_is_not_accessible_after_setup(self):
+        self.user.groups.add(self.admin_group)
+        path = reverse("accounts:accounts_initial_admin_create")
+
+        get_response = self.client.get(path)
+        post_response = self.client.post(
+            path,
+            data={
+                "username": "segundo-administrador",
+                "password1": "SenhaSegura123!",
+                "password2": "SenhaSegura123!",
+            },
+        )
+
+        self.assertEqual(get_response.status_code, 404)
+        self.assertEqual(post_response.status_code, 404)
+        self.assertFalse(
+            User.objects.filter(username="segundo-administrador").exists()
+        )
 
     def test_delete_view_get_displays_confirmation_page(self):
         response = self.client.get(
@@ -257,6 +318,7 @@ class AccountsViewTest(TestCase):
         self.assertRedirects(
             response,
             reverse("accounts:accounts_list"),
+            fetch_redirect_response=False,
         )
         self.assertFalse(
             User.objects.filter(pk=self.user.pk).exists()
@@ -271,3 +333,50 @@ class AccountsViewTest(TestCase):
         )
 
         self.assertEqual(response.status_code, 404)
+
+
+@override_settings(TEMPLATES=TEMPLATES)
+class InitialAdminSetupConcurrencyTest(TransactionTestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        Group.objects.create(name="admin")
+
+    def test_only_one_concurrent_request_can_create_initial_admin(self):
+        path = reverse("accounts:accounts_initial_admin_create")
+        barrier = Barrier(2)
+        original_post = InitialAdminCreateView.post
+
+        def synchronized_post(view, request, *args, **kwargs):
+            barrier.wait(timeout=10)
+            return original_post(view, request, *args, **kwargs)
+
+        def create_initial_admin(username):
+            close_old_connections()
+            try:
+                return Client().post(
+                    path,
+                    data={
+                        "username": username,
+                        "password1": "SenhaSegura123!",
+                        "password2": "SenhaSegura123!",
+                    },
+                ).status_code
+            finally:
+                close_old_connections()
+
+        with patch.object(
+            InitialAdminCreateView,
+            "post",
+            synchronized_post,
+        ):
+            with ThreadPoolExecutor(max_workers=2) as executor:
+                statuses = list(
+                    executor.map(
+                        create_initial_admin,
+                        ("admin-concorrente-1", "admin-concorrente-2"),
+                    )
+                )
+
+        self.assertCountEqual(statuses, [302, 404])
+        self.assertEqual(User.objects.count(), 1)

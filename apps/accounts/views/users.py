@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.edit import (
@@ -10,19 +11,19 @@ from ..forms import CustomUserWithGroupsCreationForm
 User = get_user_model()
 
 
-class AccountsListView(ListView):
+class AccountsListView(LoginRequiredMixin, ListView):
     model = User
     template_name = 'accounts/accounts_list.html'
 
 
-class AccountsWithGroupsCreateView(CreateView):
+class AccountsWithGroupsCreateView(LoginRequiredMixin, CreateView):
     model = User
     form_class = CustomUserWithGroupsCreationForm
     success_url = '/accounts/'
     template_name = 'accounts/accounts_form_with_groups.html'
 
 
-class AccountsDeleteView(DeleteView):
+class AccountsDeleteView(LoginRequiredMixin, DeleteView):
     model = User
     success_url = reverse_lazy('accounts:accounts_list')
     slug_field = 'username'

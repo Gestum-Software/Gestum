@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import resolve, reverse
 
@@ -15,10 +16,17 @@ class ResourcesUrlTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        cls.user = get_user_model().objects.create_user(
+            username="resource-url-user",
+            password="test-password",
+        )
         cls.resource = Resource.objects.create(
             nome="Projetor",
             observacoes="Projetor disponível para empréstimo.",
         )
+
+    def setUp(self):
+        self.client.force_login(self.user)
 
     def test_resource_urls_reverse_to_expected_paths(self):
         expected_urls = {

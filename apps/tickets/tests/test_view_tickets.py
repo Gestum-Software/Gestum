@@ -27,6 +27,9 @@ class TicketViewTest(TestCase):
             resource=cls.resource,
         )
 
+    def setUp(self):
+        self.client.force_login(self.user)
+
     def test_list_view_returns_tickets(self):
         response = self.client.get(reverse("tickets:ticket_list"))
 
@@ -64,6 +67,28 @@ class TicketViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "tickets/ticket_detail.html")
         self.assertEqual(response.context["object"], self.ticket)
+
+    def test_views_require_authentication(self):
+        self.client.logout()
+        login_url = reverse("accounts:accounts_login")
+        ticket_urls = (
+            ("tickets:ticket_list", {}),
+            ("tickets:ticket_create", {}),
+            ("tickets:ticket_detail", {"titulo": "Chamado-inexistente"}),
+            ("tickets:ticket_update", {"titulo": "Chamado-inexistente"}),
+            ("tickets:ticket_delete", {"titulo": "Chamado-inexistente"}),
+        )
+
+        for url_name, kwargs in ticket_urls:
+            with self.subTest(url_name=url_name):
+                requested_url = reverse(url_name, kwargs=kwargs)
+                response = self.client.get(requested_url)
+
+                self.assertRedirects(
+                    response,
+                    f"{login_url}?next={requested_url}",
+                    fetch_redirect_response=False,
+                )
 
     def test_update_view_get_displays_ticket_form(self):
         response = self.client.get(
