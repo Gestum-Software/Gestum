@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.edit import (
@@ -10,23 +11,23 @@ from .models import Ticket
 from .forms import TicketForm
 
 
-class TicketListView(ListView):
+class TicketListView(LoginRequiredMixin, ListView):
     model = Ticket
 
 
-class TicketCreateView(CreateView):
+class TicketCreateView(LoginRequiredMixin, CreateView):
     model = Ticket
     form_class = TicketForm
     success_url = reverse_lazy('tickets:ticket_list')
 
 
-class TicketDetailView(DetailView):
+class TicketDetailView(LoginRequiredMixin, DetailView):
     model = Ticket
     slug_field = 'titulo'
     slug_url_kwarg = 'titulo'
 
 
-class TickerUpdateView(UpdateView):
+class TickerUpdateView(LoginRequiredMixin, UpdateView):
     model = Ticket
     form_class = TicketForm
     success_url = reverse_lazy('tickets:ticket_list')
@@ -34,7 +35,7 @@ class TickerUpdateView(UpdateView):
     slug_field = 'titulo'
 
 
-class TicketDeleteView(DeleteView):
+class TicketDeleteView(LoginRequiredMixin, DeleteView):
     model = Ticket
     success_url = reverse_lazy('tickets:ticket_list')
     slug_field = 'titulo'
