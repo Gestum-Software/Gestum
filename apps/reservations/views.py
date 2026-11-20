@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -10,11 +11,11 @@ from .forms import ReservationForm
 from .models import Reservation
 
 
-class ReservationListView(ListView):
+class ReservationListView(LoginRequiredMixin, ListView):
     model = Reservation
 
 
-class ReservationCreateView(CreateView):
+class ReservationCreateView(LoginRequiredMixin, CreateView):
     model = Reservation
     form_class = ReservationForm
     success_url = '/reservas/'
@@ -24,13 +25,13 @@ class ReservationCreateView(CreateView):
         return super().form_valid(form)
 
 
-class ReservationDetailView(DetailView):
+class ReservationDetailView(LoginRequiredMixin, DetailView):
     model = Reservation
     slug_field = 'titulo'
     slug_url_kwarg = 'titulo'
 
 
-class ReservationUpdateView(UpdateView):
+class ReservationUpdateView(LoginRequiredMixin, UpdateView):
     model = Reservation
     form_class = ReservationForm
     success_url = '/reservas/'
@@ -38,7 +39,7 @@ class ReservationUpdateView(UpdateView):
     slug_url_kwarg = 'titulo'
 
 
-class ReservationDeleteView(DeleteView):
+class ReservationDeleteView(LoginRequiredMixin, DeleteView):
     model = Reservation
     success_url = reverse_lazy('reservations:reservation_list')
     slug_field = 'titulo'
