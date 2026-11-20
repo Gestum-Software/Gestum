@@ -218,3 +218,32 @@ class ReservationViewTest(TestCase):
                 )
 
                 self.assertEqual(response.status_code, 404)
+
+    def test_protected_views_require_authenticated_user(self):
+        self.client.logout()
+        protected_paths = (
+            reverse("reservations:reservation_list"),
+            reverse("reservations:reservation_create"),
+            reverse(
+                "reservations:reservation_detail",
+                kwargs={"titulo": "Reserva-inexistente"},
+            ),
+            reverse(
+                "reservations:reservation_update",
+                kwargs={"titulo": "Reserva-inexistente"},
+            ),
+            reverse(
+                "reservations:reservation_delete",
+                kwargs={"titulo": "Reserva-inexistente"},
+            ),
+        )
+
+        for path in protected_paths:
+            with self.subTest(path=path):
+                response = self.client.get(path)
+
+                self.assertRedirects(
+                    response,
+                    f"{reverse('accounts:accounts_login')}?next={path}",
+                    fetch_redirect_response=False,
+                )
