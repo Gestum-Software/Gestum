@@ -47,6 +47,9 @@ class AccountsViewTest(TestCase):
         )
         cls.user.groups.add(cls.group)
 
+    def setUp(self):
+        self.client.force_login(self.user)
+
     def test_list_view_returns_accounts(self):
         response = self.client.get(reverse("accounts:accounts_list"))
 
@@ -58,6 +61,7 @@ class AccountsViewTest(TestCase):
         self.assertIn(self.user, response.context["object_list"])
 
     def test_login_view_get_displays_form(self):
+        self.client.logout()
         response = self.client.get(reverse("accounts:accounts_login"))
 
         self.assertEqual(response.status_code, 200)
@@ -69,6 +73,7 @@ class AccountsViewTest(TestCase):
         self.assertEqual(response.context["form"].initial, {})
 
     def test_login_view_post_authenticates_user_and_redirects(self):
+        self.client.logout()
         response = self.client.post(
             reverse("accounts:accounts_login"),
             data={
@@ -97,6 +102,7 @@ class AccountsViewTest(TestCase):
         self.assertNotIn("_auth_user_id", self.client.session)
 
     def test_logout_view_requires_authenticated_user(self):
+        self.client.logout()
         response = self.client.post(reverse("accounts:accounts_logout"))
 
         self.assertRedirects(
@@ -105,6 +111,27 @@ class AccountsViewTest(TestCase):
             f"{reverse('accounts:accounts_logout')}",
             fetch_redirect_response=False,
         )
+
+    def test_protected_views_require_authenticated_user(self):
+        self.client.logout()
+        protected_paths = (
+            reverse("accounts:accounts_list"),
+            reverse("accounts:accounts_create"),
+            reverse(
+                "accounts:accounts_delete",
+                kwargs={"username": self.user.username},
+            ),
+        )
+
+        for path in protected_paths:
+            with self.subTest(path=path):
+                response = self.client.get(path)
+
+                self.assertRedirects(
+                    response,
+                    f"{reverse('accounts:accounts_login')}?next={path}",
+                    fetch_redirect_response=False,
+                )
 
     def test_create_view_get_displays_form(self):
         response = self.client.get(reverse("accounts:accounts_create"))
@@ -257,6 +284,7 @@ class AccountsViewTest(TestCase):
         self.assertRedirects(
             response,
             reverse("accounts:accounts_list"),
+            fetch_redirect_response=False,
         )
         self.assertFalse(
             User.objects.filter(pk=self.user.pk).exists()
