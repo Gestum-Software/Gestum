@@ -31,9 +31,11 @@
 								<a href="{% url 'tickets:ticket_update' ticket.titulo %}">
                                     <i class="fa-solid fa-pen-to-square fa-lg" style="color: #6b3030;"></i>
                                 </a>
+								{% if perms.tickets.delete_ticket %}
 								<a href="{% url 'tickets:ticket_delete' ticket.titulo %}">
                                     <i class="fa-solid fa-trash" style="color: #bd180f;"></i>
                                 </a>
+								{% endif %}
 							</div>
 						</div>
 
