@@ -94,6 +94,7 @@ def create_groups_and_permissions(apps, schema_editor):
         add_ticket,
         change_ticket,
         view_ticket,
+        delete_ticket,
         add_reservation,
         change_reservation,
         delete_reservation,
