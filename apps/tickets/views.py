@@ -1,4 +1,7 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+)
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.edit import (
@@ -27,16 +30,26 @@ class TicketDetailView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = 'titulo'
 
 
-class TickerUpdateView(LoginRequiredMixin, UpdateView):
+class TickerUpdateView(
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    UpdateView,
+):
     model = Ticket
     form_class = TicketForm
     success_url = reverse_lazy('tickets:ticket_list')
     slug_url_kwarg = 'titulo'
     slug_field = 'titulo'
+    permission_required = 'tickets.change_ticket'
 
 
-class TicketDeleteView(LoginRequiredMixin, DeleteView):
+class TicketDeleteView(
+    LoginRequiredMixin,
+    PermissionRequiredMixin,
+    DeleteView,
+):
     model = Ticket
     success_url = reverse_lazy('tickets:ticket_list')
     slug_field = 'titulo'
     slug_url_kwarg = 'titulo'
+    permission_required = 'tickets.delete_ticket'
