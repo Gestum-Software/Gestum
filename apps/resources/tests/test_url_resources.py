@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import resolve, reverse
 
@@ -19,6 +20,16 @@ class ResourcesUrlTest(TestCase):
         cls.user = get_user_model().objects.create_user(
             username="resource-url-user",
             password="test-password",
+        )
+        cls.user.user_permissions.add(
+            *Permission.objects.filter(
+                content_type__app_label="resources",
+                codename__in=(
+                    "add_resource",
+                    "change_resource",
+                    "delete_resource",
+                ),
+            )
         )
         cls.resource = Resource.objects.create(
             nome="Projetor",
