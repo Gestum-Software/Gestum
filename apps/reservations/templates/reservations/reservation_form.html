@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'reservations/css/reservation_form.css' %}">
+    <title>{% if object %}Editar reserva{% else %}Reservar recurso{% endif %}</title>
+</head>
+
+<body>
+    <header class="page-header">
+        <h1 class="page-header__logo">Gestum</h1>
+        <div class="page-header__avatar"></div>
+    </header>
+
+    <main class="page-content">
+        <form method="post" class="form-card">
+            {% csrf_token %}
+            <h2 class="form-card__title">
+                {% if object %}Editar reserva{% else %}Reservar recurso{% endif %}
+            </h2>
+
+            {% if form.non_field_errors %}
+                <div class="form-errors">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="form-field">
+                <label class="form-field__label" for="{{ form.titulo.id_for_label }}">Título</label>
+                {{ form.titulo }}
+                {{ form.titulo.errors }}
+            </div>
+
+            <div class="form-field">
+                <label class="form-field__label" for="{{ form.resource.id_for_label }}">Recurso</label>
+                {{ form.resource }}
+                {{ form.resource.errors }}
+            </div>
+
+            <div class="form-row">
+                <div class="form-field">
+                    <label class="form-field__label" for="{{ form.inicio.id_for_label }}">Início</label>
+                    {{ form.inicio }}
+                    {{ form.inicio.errors }}
+                </div>
+                <div class="form-field">
+                    <label class="form-field__label" for="{{ form.fim.id_for_label }}">Fim</label>
+                    {{ form.fim }}
+                    {{ form.fim.errors }}
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label class="form-field__label" for="{{ form.observacoes.id_for_label }}">Observações</label>
+                {{ form.observacoes }}
+                {{ form.observacoes.errors }}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn--primary">
+                    {% if object %}Salvar{% else %}Reservar{% endif %}
+                </button>
+                <a href="{% url 'reservations:reservation_list' %}" class="btn btn--secondary">Cancelar</a>
+            </div>
+        </form>
+    </main>
+</body>
+
+</html>
