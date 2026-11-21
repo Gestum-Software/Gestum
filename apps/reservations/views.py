@@ -52,4 +52,4 @@ class ReservationDeleteView(
     success_url = reverse_lazy('reservations:reservation_list')
     slug_field = 'titulo'
     slug_url_kwarg = 'titulo'
-    permission_required = 'reservations.delete_reservations'
+    permission_required = 'reservations.delete_reservation'
