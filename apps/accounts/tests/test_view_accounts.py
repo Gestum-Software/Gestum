@@ -3,7 +3,7 @@ from threading import Barrier
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.db import close_old_connections
 from django.test import Client, TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
@@ -38,18 +38,36 @@ TEMPLATES = [
     },
 ]
 
+ACCOUNT_PERMISSIONS = (
+    "view_customuser",
+    "add_customuser",
+    "delete_customuser",
+)
+
+
+def get_account_permissions():
+    return {
+        f"accounts.{codename}": Permission.objects.get(
+            content_type__app_label="accounts",
+            codename=codename,
+        )
+        for codename in ACCOUNT_PERMISSIONS
+    }
+
 
 @override_settings(TEMPLATES=TEMPLATES)
 class AccountsViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+        cls.permissions = get_account_permissions()
         cls.group = Group.objects.create(name="Administradores")
         cls.admin_group, _ = Group.objects.get_or_create(name="admin")
         cls.user = User.objects.create_user(
             username="usuario-teste",
             password="SenhaSegura123!",
         )
+        cls.user.user_permissions.add(*cls.permissions.values())
         cls.user.groups.add(cls.group)
 
     def setUp(self):
@@ -137,6 +155,47 @@ class AccountsViewTest(TestCase):
                     f"{reverse('accounts:accounts_login')}?next={path}",
                     fetch_redirect_response=False,
                 )
+
+    def test_protected_views_require_their_specific_permissions(self):
+        protected_views = (
+            (
+                "accounts_list",
+                {},
+                "accounts.view_customuser",
+            ),
+            (
+                "accounts_create",
+                {},
+                "accounts.add_customuser",
+            ),
+            (
+                "accounts_delete",
+                {"username": self.user.username},
+                "accounts.delete_customuser",
+            ),
+        )
+
+        for url_name, kwargs, required_permission in protected_views:
+            with self.subTest(url_name=url_name):
+                user = User.objects.create_user(
+                    username=f"sem-{url_name}",
+                    password="SenhaSegura123!",
+                )
+                user.user_permissions.add(
+                    *(
+                        permission
+                        for permission_name, permission
+                        in self.permissions.items()
+                        if permission_name != required_permission
+                    )
+                )
+                self.client.force_login(user)
+
+                response = self.client.get(
+                    reverse(f"accounts:{url_name}", kwargs=kwargs)
+                )
+
+                self.assertEqual(response.status_code, 403)
 
     def test_create_view_get_displays_form(self):
         response = self.client.get(reverse("accounts:accounts_create"))

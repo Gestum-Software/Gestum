@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import resolve, reverse
 
@@ -21,6 +22,16 @@ class AccountsUrlTest(TestCase):
         cls.user = User.objects.create_user(
             username="usuario-teste",
             password="SenhaSegura123!",
+        )
+        cls.user.user_permissions.add(
+            *Permission.objects.filter(
+                content_type__app_label="accounts",
+                codename__in=(
+                    "view_customuser",
+                    "add_customuser",
+                    "delete_customuser",
+                ),
+            )
         )
 
     def setUp(self):
