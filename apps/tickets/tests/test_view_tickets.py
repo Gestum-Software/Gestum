@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 
@@ -14,6 +15,20 @@ class TicketViewTest(TestCase):
     def setUpTestData(cls):
         cls.user = User.objects.create_user(
             username="usuario-teste",
+            password="senha-segura",
+        )
+        cls.user.user_permissions.add(
+            Permission.objects.get(
+                content_type__app_label="tickets",
+                codename="change_ticket",
+            ),
+            Permission.objects.get(
+                content_type__app_label="tickets",
+                codename="delete_ticket",
+            ),
+        )
+        cls.user_without_ticket_permissions = User.objects.create_user(
+            username="usuario-sem-permissao",
             password="senha-segura",
         )
         cls.resource = Resource.objects.create(
@@ -89,6 +104,19 @@ class TicketViewTest(TestCase):
                     f"{login_url}?next={requested_url}",
                     fetch_redirect_response=False,
                 )
+
+    def test_update_and_delete_views_require_permissions(self):
+        self.client.force_login(self.user_without_ticket_permissions)
+        protected_urls = (
+            ("tickets:ticket_update", {"titulo": self.ticket.titulo}),
+            ("tickets:ticket_delete", {"titulo": self.ticket.titulo}),
+        )
+
+        for url_name, kwargs in protected_urls:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name, kwargs=kwargs))
+
+                self.assertEqual(response.status_code, 403)
 
     def test_update_view_get_displays_ticket_form(self):
         response = self.client.get(

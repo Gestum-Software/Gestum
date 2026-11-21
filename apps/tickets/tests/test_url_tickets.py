@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import resolve, reverse
 
@@ -22,6 +23,16 @@ class TicketUrlTest(TestCase):
         cls.user = User.objects.create_user(
             username="usuario-teste",
             password="senha-segura-123",
+        )
+        cls.user.user_permissions.add(
+            Permission.objects.get(
+                content_type__app_label="tickets",
+                codename="change_ticket",
+            ),
+            Permission.objects.get(
+                content_type__app_label="tickets",
+                codename="delete_ticket",
+            ),
         )
         cls.resource = Resource.objects.create(
             nome="Projetor",
