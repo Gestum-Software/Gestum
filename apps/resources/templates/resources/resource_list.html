@@ -35,9 +35,12 @@
                         <h2>{{ recurso.nome }}</h2>
 
                         <div class="edit-delete">
+                            {% if perms.resources.change_resource %}
                             <a href="{% url 'resource:resource_update' recurso.nome %}">
                                 <i class="fa-solid fa-pen-to-square fa-lg" style="color: #692f2f;"></i>
                             </a>
+                            {% endif %}
+
                             {% if perms.resources.delete_resource %}
                             <a href="{% url 'resource:resource_delete' recurso.nome %}">
                                 <i class="fa-solid fa-trash" style="color: #bd180f;"></i>
