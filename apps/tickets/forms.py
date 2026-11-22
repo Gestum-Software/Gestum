@@ -6,7 +6,7 @@ class TicketForm(forms.ModelForm):
 
     class Meta:
         model = Ticket
-        fields = ['titulo', 'descricao']
+        fields = ['titulo', 'descricao', 'resource']
         widgets = {
             'titulo': forms.TextInput(attrs={
                 'class': 'campo-titulo',
@@ -17,4 +17,7 @@ class TicketForm(forms.ModelForm):
                 'class': 'campo-descricao',
                 'placeholder': 'Descrição do chamado',
                 'maxlength': '1500'}),
+            'resource': forms.Select(attrs={
+                'class': 'campo-recursos',
+            }),
         }

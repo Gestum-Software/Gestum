@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 
@@ -15,6 +16,34 @@ class TicketViewTest(TestCase):
         cls.user = User.objects.create_user(
             username="usuario-teste",
             password="senha-segura",
+        )
+        cls.user.user_permissions.add(
+            Permission.objects.get(
+                content_type__app_label="tickets",
+                codename="change_ticket",
+            ),
+            Permission.objects.get(
+                content_type__app_label="tickets",
+                codename="delete_ticket",
+            ),
+        )
+        cls.user_without_ticket_permissions = User.objects.create_user(
+            username="usuario-sem-permissao",
+            password="senha-segura",
+        )
+        cls.other_user = User.objects.create_user(
+            username="outro-usuario",
+            password="senha-segura",
+        )
+        cls.other_user.user_permissions.add(
+            Permission.objects.get(
+                content_type__app_label="tickets",
+                codename="change_ticket",
+            ),
+            Permission.objects.get(
+                content_type__app_label="tickets",
+                codename="delete_ticket",
+            ),
         )
         cls.resource = Resource.objects.create(
             nome="Projetor",
@@ -90,6 +119,19 @@ class TicketViewTest(TestCase):
                     fetch_redirect_response=False,
                 )
 
+    def test_update_and_delete_views_require_permissions(self):
+        self.client.force_login(self.user_without_ticket_permissions)
+        protected_urls = (
+            ("tickets:ticket_update", {"titulo": self.ticket.titulo}),
+            ("tickets:ticket_delete", {"titulo": self.ticket.titulo}),
+        )
+
+        for url_name, kwargs in protected_urls:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name, kwargs=kwargs))
+
+                self.assertEqual(response.status_code, 403)
+
     def test_update_view_get_displays_ticket_form(self):
         response = self.client.get(
             reverse(
@@ -111,6 +153,7 @@ class TicketViewTest(TestCase):
             data={
                 "titulo": "Projetor revisado",
                 "descricao": "O projetor foi revisado pela equipe.",
+                "resource": self.resource.pk,
             },
         )
 
@@ -124,6 +167,20 @@ class TicketViewTest(TestCase):
         )
         self.assertEqual(self.ticket.usuario, self.user)
         self.assertEqual(self.ticket.resource, self.resource)
+
+    def test_owner_from_another_user_cannot_update_or_delete_ticket(self):
+        self.client.force_login(self.other_user)
+        protected_urls = (
+            ("tickets:ticket_update", {"titulo": self.ticket.titulo}),
+            ("tickets:ticket_delete", {"titulo": self.ticket.titulo}),
+        )
+
+        for url_name, kwargs in protected_urls:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(
+                    reverse(url_name, kwargs=kwargs),
+                )
+                self.assertEqual(response.status_code, 403)
 
     def test_delete_view_get_displays_confirmation_page(self):
         response = self.client.get(

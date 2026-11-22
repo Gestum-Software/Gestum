@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 
@@ -10,6 +11,20 @@ class ResourcesViewTest(TestCase):
     def setUpTestData(cls):
         cls.user = get_user_model().objects.create_user(
             username="resource-view-user",
+            password="test-password",
+        )
+        cls.user.user_permissions.add(
+            *Permission.objects.filter(
+                content_type__app_label="resources",
+                codename__in=(
+                    "add_resource",
+                    "change_resource",
+                    "delete_resource",
+                ),
+            )
+        )
+        cls.user_without_permissions = get_user_model().objects.create_user(
+            username="resource-view-user-without-permissions",
             password="test-password",
         )
         cls.resource = Resource.objects.create(
@@ -48,6 +63,20 @@ class ResourcesViewTest(TestCase):
                     f"{login_url}?next={requested_url}",
                     fetch_redirect_response=False,
                 )
+
+    def test_protected_views_require_resource_permissions(self):
+        self.client.force_login(self.user_without_permissions)
+        protected_urls = (
+            ("resource:resource_create", {}),
+            ("resource:resource_update", {"nome": self.resource.nome}),
+            ("resource:resource_delete", {"nome": self.resource.nome}),
+        )
+
+        for url_name, kwargs in protected_urls:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name, kwargs=kwargs))
+
+                self.assertEqual(response.status_code, 403)
 
     def test_create_view_get_displays_form(self):
         response = self.client.get(reverse("resource:resource_create"))

@@ -24,7 +24,9 @@
                 <a class="dashboard-link" href="{% url 'resource:resource_list' %}">Recursos</a>
                 <a class="dashboard-link" href="{% url 'tickets:ticket_list' %}">Chamados</a>
                 <a class="dashboard-link" href="{% url 'reservations:reservation_list' %}">Reservas</a>
+                {% if perms.accounts.view_customuser %}
                 <a class="dashboard-link link-usuario" href="{% url 'accounts:accounts_list' %}">Usuários</a>
+                {% endif %}
             </div>
         </section>
     </main>

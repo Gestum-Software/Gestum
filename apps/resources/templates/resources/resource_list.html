@@ -22,9 +22,11 @@
     </header>
 
     <main>
+        {% if perms.resources.add_resource %}
         <div class="container-btn-criar">
             <a class="btn-criar-recurso" href="{% url 'resource:resource_create' %}">Criar recurso</a>
         </div>
+        {% endif %}
 
         <div class="container-recursos">
             {% for recurso in object_list %}
@@ -33,12 +35,17 @@
                         <h2>{{ recurso.nome }}</h2>
 
                         <div class="edit-delete">
+                            {% if perms.resources.change_resource %}
                             <a href="{% url 'resource:resource_update' recurso.nome %}">
                                 <i class="fa-solid fa-pen-to-square fa-lg" style="color: #692f2f;"></i>
                             </a>
+                            {% endif %}
+
+                            {% if perms.resources.delete_resource %}
                             <a href="{% url 'resource:resource_delete' recurso.nome %}">
                                 <i class="fa-solid fa-trash" style="color: #bd180f;"></i>
                             </a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="recurso-actions">

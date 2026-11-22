@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -16,6 +17,40 @@ class ReservationViewTest(TestCase):
         cls.user = get_user_model().objects.create_user(
             username="reservation-view-user",
             password="test-password",
+        )
+        cls.user.user_permissions.add(
+            Permission.objects.get(
+                content_type__app_label="reservations",
+                codename="add_reservation",
+            ),
+            Permission.objects.get(
+                content_type__app_label="reservations",
+                codename="change_reservation",
+            ),
+            Permission.objects.get(
+                content_type__app_label="reservations",
+                codename="delete_reservation",
+            ),
+        )
+        cls.user_without_reservation_permissions = (
+            get_user_model().objects.create_user(
+                username="reservation-view-user-without-permissions",
+                password="test-password",
+            )
+        )
+        cls.other_user = get_user_model().objects.create_user(
+            username="reservation-other-user",
+            password="test-password",
+        )
+        cls.other_user.user_permissions.add(
+            Permission.objects.get(
+                content_type__app_label="reservations",
+                codename="change_reservation",
+            ),
+            Permission.objects.get(
+                content_type__app_label="reservations",
+                codename="delete_reservation",
+            ),
         )
         cls.resource = Resource.objects.create(
             nome="Projetor",
@@ -170,6 +205,20 @@ class ReservationViewTest(TestCase):
         self.assertEqual(self.reservation.observacoes, "Reserva revisada.")
         self.assertEqual(self.reservation.usuario, self.user)
 
+    def test_owner_from_another_user_cannot_update_or_delete_reservation(self):
+        self.client.force_login(self.other_user)
+        protected_urls = (
+            ("reservations:reservation_update", {"titulo": self.reservation.titulo}),
+            ("reservations:reservation_delete", {"titulo": self.reservation.titulo}),
+        )
+
+        for url_name, kwargs in protected_urls:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(
+                    reverse(url_name, kwargs=kwargs),
+                )
+                self.assertEqual(response.status_code, 403)
+
     def test_delete_view_get_displays_confirmation_page(self):
         response = self.client.get(
             reverse(
@@ -200,6 +249,31 @@ class ReservationViewTest(TestCase):
         self.assertFalse(
             Reservation.objects.filter(pk=self.reservation.pk).exists(),
         )
+
+    def test_create_view_requires_add_reservation_permission(self):
+        self.client.force_login(
+            self.user_without_reservation_permissions,
+        )
+
+        response = self.client.get(
+            reverse("reservations:reservation_create"),
+        )
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_delete_view_requires_delete_reservation_permission(self):
+        self.client.force_login(
+            self.user_without_reservation_permissions,
+        )
+
+        response = self.client.get(
+            reverse(
+                "reservations:reservation_delete",
+                kwargs={"titulo": self.reservation.titulo},
+            )
+        )
+
+        self.assertEqual(response.status_code, 403)
 
     def test_views_return_not_found_for_unknown_reservation(self):
         reservation_urls = (
