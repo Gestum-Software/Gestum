@@ -31,10 +31,9 @@ class TicketFormTest(TestCase):
     def test_form_exposes_only_editable_ticket_fields(self):
         form = TicketForm()
 
-        self.assertEqual(list(form.fields), ["titulo", "descricao"])
+        self.assertEqual(list(form.fields), ["titulo", "descricao", "resource"])
         self.assertNotIn("status", form.fields)
         self.assertNotIn("usuario", form.fields)
-        self.assertNotIn("resource", form.fields)
 
     def test_form_uses_expected_widgets_and_attributes(self):
         form = TicketForm()
@@ -68,6 +67,7 @@ class TicketFormTest(TestCase):
             data={
                 "titulo": "Computador não liga",
                 "descricao": "O computador não liga ao ser iniciado.",
+                "resource": self.resource.pk,
             }
         )
 
@@ -93,6 +93,7 @@ class TicketFormTest(TestCase):
             data={
                 "titulo": "T" * 51,
                 "descricao": "D" * 1501,
+                "resource": self.resource.pk,
             }
         )
 
@@ -106,6 +107,7 @@ class TicketFormTest(TestCase):
             data={
                 "titulo": "Projetor revisado",
                 "descricao": "O projetor foi revisado pela equipe.",
+                "resource": self.resource.pk,
             },
             instance=self.ticket,
         )
