@@ -32,6 +32,10 @@ class ReservationsUrlTest(TestCase):
             ),
             Permission.objects.get(
                 content_type__app_label="reservations",
+                codename="change_reservation",
+            ),
+            Permission.objects.get(
+                content_type__app_label="reservations",
                 codename="delete_reservation",
             ),
         )

@@ -25,6 +25,10 @@ class ReservationViewTest(TestCase):
             ),
             Permission.objects.get(
                 content_type__app_label="reservations",
+                codename="change_reservation",
+            ),
+            Permission.objects.get(
+                content_type__app_label="reservations",
                 codename="delete_reservation",
             ),
         )
@@ -33,6 +37,20 @@ class ReservationViewTest(TestCase):
                 username="reservation-view-user-without-permissions",
                 password="test-password",
             )
+        )
+        cls.other_user = get_user_model().objects.create_user(
+            username="reservation-other-user",
+            password="test-password",
+        )
+        cls.other_user.user_permissions.add(
+            Permission.objects.get(
+                content_type__app_label="reservations",
+                codename="change_reservation",
+            ),
+            Permission.objects.get(
+                content_type__app_label="reservations",
+                codename="delete_reservation",
+            ),
         )
         cls.resource = Resource.objects.create(
             nome="Projetor",
@@ -186,6 +204,20 @@ class ReservationViewTest(TestCase):
         )
         self.assertEqual(self.reservation.observacoes, "Reserva revisada.")
         self.assertEqual(self.reservation.usuario, self.user)
+
+    def test_owner_from_another_user_cannot_update_or_delete_reservation(self):
+        self.client.force_login(self.other_user)
+        protected_urls = (
+            ("reservations:reservation_update", {"titulo": self.reservation.titulo}),
+            ("reservations:reservation_delete", {"titulo": self.reservation.titulo}),
+        )
+
+        for url_name, kwargs in protected_urls:
+            with self.subTest(url_name=url_name):
+                response = self.client.get(
+                    reverse(url_name, kwargs=kwargs),
+                )
+                self.assertEqual(response.status_code, 403)
 
     def test_delete_view_get_displays_confirmation_page(self):
         response = self.client.get(
