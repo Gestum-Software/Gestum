@@ -37,17 +37,21 @@
                         <h2 class="reservation-title">{{ reservation.titulo }}</h2>
 
                         <div class="b-delete">
+                            {% if reservation.usuario == request.user or show_all_actions %}
                             <a href="{% url 'reservations:reservation_delete' reservation.titulo %}">
                                 <i class="fa-solid fa-trash" style="color: #bd180f;"></i>
                             </a>
+                            {% endif %}
                         </div>
                     </div>
 
                     <div class="reservation-actions">
+                        {% if reservation.usuario == request.user or show_all_actions %}
                         <a class="link-to-update reservation-action" href="{% url 'reservations:reservation_update' reservation.titulo %}">
                             <i class="fa-solid fa-pen-to-square fa-lg" style="color: #6b3030;"></i>
                             Editar reserva
                         </a>
+                        {% endif %}
                         <div class="reservation-date reservation-action">
                             <i class="fa-regular fa-calendar fa-lg" style="color: #6b3030;"></i>
                             <p>
