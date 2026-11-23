@@ -6,7 +6,6 @@ from .forms import CustomUserChangeForm
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    form = CustomUserChangeForm
     fieldsets = UserAdmin.fieldsets
 
 
