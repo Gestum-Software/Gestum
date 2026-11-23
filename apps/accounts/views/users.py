@@ -3,13 +3,15 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin,
 )
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.edit import (
     CreateView,
+    UpdateView,
     DeleteView,
 )
-from ..forms import CustomUserWithGroupsCreationForm
+from ..forms import CustomUserWithGroupsCreationForm, CustomUserChangeForm
 
 User = get_user_model()
 
@@ -43,3 +45,17 @@ class AccountsDeleteView(
     slug_url_kwarg = 'username'
     template_name = 'accounts/accounts_confirm_delete.html'
     permission_required = 'accounts.delete_customuser'
+
+
+class AccountsProfileUpdateView(
+    LoginRequiredMixin,
+    SuccessMessageMixin,
+    UpdateView,
+):
+    model = User
+    form_class = CustomUserChangeForm
+    success_url = reverse_lazy('core:home')
+    success_message = "Perfil atualizado com sucesso!"
+
+    def get_object(self, queryset=None):
+        return self.request.user

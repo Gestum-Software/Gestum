@@ -35,11 +35,6 @@
                     <h2>{{ user.username }}</h2>
 
                     <div class="user-actions">
-                        <a class="user-action user-link-edit" href="#">
-                            <i class="fa-solid fa-pen-to-square fa-lg" style="color: #6b3030;"></i>
-                            Editar
-                        </a>
-
                         <a class="user-action user-link-delete" href="{% url 'accounts:accounts_delete' user.username %}">
                             <i class="fa-solid fa-trash fa-lg" style="color: #bd180f;"></i>
                             Excluir

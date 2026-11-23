@@ -3,6 +3,7 @@ from .views.users import (
     AccountsListView,
     AccountsWithGroupsCreateView,
     AccountsDeleteView,
+    AccountsProfileUpdateView,
 )
 from .views.setup import (
     InitialAdminCreateView,
@@ -50,5 +51,11 @@ urlpatterns = [
         'logout/',
         AccountsLogoutView.as_view(),
         name='accounts_logout',
-    )
+    ),
+
+    path(
+        'edit-profile/',
+        AccountsProfileUpdateView.as_view(),
+        name='edit_profile',
+    ),
 ]
