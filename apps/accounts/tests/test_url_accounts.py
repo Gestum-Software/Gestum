@@ -7,6 +7,7 @@ from apps.accounts.views.authentication import AccountsLoginView
 from apps.accounts.views.users import (
     AccountsDeleteView,
     AccountsListView,
+    AccountsProfileUpdateView,
     AccountsWithGroupsCreateView,
 )
 from apps.accounts.views.setup import InitialAdminCreateView
@@ -43,6 +44,7 @@ class AccountsUrlTest(TestCase):
             "accounts_create": ("/accounts/create/", {}),
             "accounts_initial_admin_create": ("/accounts/create-initial-admin/", {}),
             "accounts_login": ("/accounts/login/", {}),
+            "edit_profile": ("/accounts/edit-profile/", {}),
             "accounts_delete": (
                 f"/accounts/delete/{self.user.username}",
                 {"username": self.user.username},
@@ -62,6 +64,7 @@ class AccountsUrlTest(TestCase):
             "accounts_create": AccountsWithGroupsCreateView,
             "accounts_initial_admin_create": InitialAdminCreateView,
             "accounts_login": AccountsLoginView,
+            "edit_profile": AccountsProfileUpdateView,
             "accounts_delete": AccountsDeleteView,
         }
 
@@ -84,6 +87,7 @@ class AccountsUrlTest(TestCase):
             "accounts_list": {},
             "accounts_create": {},
             "accounts_delete": {"username": self.user.username},
+            "edit_profile": {},
         }
 
         for url_name, kwargs in url_kwargs.items():
