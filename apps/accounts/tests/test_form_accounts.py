@@ -5,6 +5,7 @@ from django.test import TestCase
 
 from apps.accounts.forms import (
     CustomAuthenticationForm,
+    CustomUserChangeForm,
     CustomUserCreationForm,
     CustomUserWithGroupsCreationForm,
 )
@@ -268,3 +269,53 @@ class CustomUserWithGroupsCreationFormTest(TestCase):
             set(user.groups.values_list("pk", flat=True)),
             {self.administrator_group.pk},
         )
+
+
+class CustomUserChangeFormTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(
+            username="usuario-perfil",
+            password="SenhaSegura123!",
+        )
+        cls.other_user = User.objects.create_user(
+            username="outro-usuario",
+            password="SenhaSegura123!",
+        )
+
+    def test_form_exposes_only_username_without_password_field(self):
+        form = CustomUserChangeForm(instance=self.user)
+
+        self.assertEqual(list(form.fields), ["username"])
+        self.assertEqual(form.fields["username"].label, "Nome")
+        self.assertIsNone(form.fields["username"].help_text)
+        self.assertEqual(
+            form.fields["username"].widget.attrs,
+            {
+                "maxlength": "150",
+                "class": "campo-nome",
+                "placeholder": "Digite o nome",
+            },
+        )
+
+    def test_form_updates_username_without_changing_password(self):
+        form = CustomUserChangeForm(
+            data={"username": "nome-atualizado"},
+            instance=self.user,
+        )
+
+        self.assertTrue(form.is_valid(), form.errors.as_text())
+        updated_user = form.save()
+
+        self.assertEqual(updated_user.username, "nome-atualizado")
+        self.assertTrue(updated_user.check_password("SenhaSegura123!"))
+
+    def test_form_rejects_duplicate_username(self):
+        form = CustomUserChangeForm(
+            data={"username": self.other_user.username},
+            instance=self.user,
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("username", form.errors)

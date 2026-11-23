@@ -20,6 +20,7 @@ ACCOUNT_TEMPLATES = {
     "accounts/accounts_confirm_delete.html": "{{ object }}",
     "accounts/accounts_initial_admin_form.html": "{{ form }}",
     "accounts/accounts_login.html": "{{ form }}",
+    "accounts/customuser_form.html": "{{ form }}",
 }
 
 TEMPLATES = [
@@ -140,12 +141,12 @@ class AccountsViewTest(TestCase):
         protected_paths = (
             reverse("accounts:accounts_list"),
             reverse("accounts:accounts_create"),
+            reverse("accounts:edit_profile"),
             reverse(
                 "accounts:accounts_delete",
                 kwargs={"username": self.user.username},
             ),
         )
-
         for path in protected_paths:
             with self.subTest(path=path):
                 response = self.client.get(path)
@@ -155,6 +156,40 @@ class AccountsViewTest(TestCase):
                     f"{reverse('accounts:accounts_login')}?next={path}",
                     fetch_redirect_response=False,
                 )
+
+    def test_profile_update_view_get_displays_current_user_form(self):
+        response = self.client.get(reverse("accounts:edit_profile"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response,
+            "accounts/customuser_form.html",
+        )
+        self.assertEqual(response.context["form"].instance, self.user)
+
+    def test_profile_update_view_post_updates_current_user_and_redirects(self):
+        response = self.client.post(
+            reverse("accounts:edit_profile"),
+            data={"username": "perfil-atualizado"},
+        )
+
+        self.user.refresh_from_db()
+        self.assertRedirects(
+            response,
+            reverse("core:home"),
+            fetch_redirect_response=False,
+        )
+        self.assertEqual(self.user.username, "perfil-atualizado")
+
+    def test_profile_update_view_rejects_invalid_username(self):
+        response = self.client.post(
+            reverse("accounts:edit_profile"),
+            data={"username": ""},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("username", response.context["form"].errors)
+        self.assertEqual(self.user.username, "usuario-teste")
 
     def test_protected_views_require_their_specific_permissions(self):
         protected_views = (

@@ -1,6 +1,10 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    AuthenticationForm,
+    UserChangeForm,
+)
 from django.contrib.auth.models import Group
 
 User = get_user_model()
@@ -75,3 +79,23 @@ class CustomAuthenticationForm(AuthenticationForm):
         'class': 'form-control',
         'placeholder': 'Digite sua senha'
     }))
+
+
+class CustomUserChangeForm(UserChangeForm):
+    password = None
+
+    class Meta:
+        model = User
+        fields = ['username']
+        labels = {
+            'username': 'Nome',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['username'].help_text = None
+        self.fields['username'].widget.attrs.update({
+            'class': 'campo-nome',
+            'placeholder': 'Digite o nome'
+        })
