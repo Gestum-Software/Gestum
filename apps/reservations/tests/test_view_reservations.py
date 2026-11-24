@@ -74,8 +74,8 @@ class ReservationViewTest(TestCase):
         data = {
             "titulo": "Reunião de planejamento",
             "observacoes": "Reserva para a reunião da equipe.",
-            "inicio": "2026-09-16 10:00",
-            "fim": "2026-09-16 12:00",
+            "inicio": "2026-09-16T10:00",
+            "fim": "2026-09-16T12:00",
             "resource": self.resource.pk,
         }
         data.update(overrides)
