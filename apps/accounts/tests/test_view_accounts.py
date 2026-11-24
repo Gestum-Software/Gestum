@@ -75,6 +75,11 @@ class AccountsViewTest(TestCase):
         self.client.force_login(self.user)
 
     def test_list_view_returns_accounts(self):
+        other_user = User.objects.create_user(
+            username="outro-usuario",
+            password="SenhaSegura123!",
+        )
+
         response = self.client.get(reverse("accounts:accounts_list"))
 
         self.assertEqual(response.status_code, 200)
@@ -82,7 +87,8 @@ class AccountsViewTest(TestCase):
             response,
             "accounts/accounts_list.html",
         )
-        self.assertIn(self.user, response.context["object_list"])
+        self.assertNotIn(self.user, response.context["object_list"])
+        self.assertIn(other_user, response.context["object_list"])
 
     def test_login_view_get_displays_form(self):
         self.client.logout()
@@ -387,10 +393,14 @@ class AccountsViewTest(TestCase):
         )
 
     def test_delete_view_get_displays_confirmation_page(self):
+        other_user = User.objects.create_user(
+            username="usuario-para-excluir",
+            password="SenhaSegura123!",
+        )
         response = self.client.get(
             reverse(
                 "accounts:accounts_delete",
-                kwargs={"username": self.user.username},
+                kwargs={"username": other_user.username},
             )
         )
 
@@ -399,13 +409,17 @@ class AccountsViewTest(TestCase):
             response,
             "accounts/accounts_confirm_delete.html",
         )
-        self.assertEqual(response.context["object"], self.user)
+        self.assertEqual(response.context["object"], other_user)
 
     def test_delete_view_post_deletes_account_and_redirects(self):
+        other_user = User.objects.create_user(
+            username="usuario-para-excluir",
+            password="SenhaSegura123!",
+        )
         response = self.client.post(
             reverse(
                 "accounts:accounts_delete",
-                kwargs={"username": self.user.username},
+                kwargs={"username": other_user.username},
             )
         )
 
@@ -415,8 +429,19 @@ class AccountsViewTest(TestCase):
             fetch_redirect_response=False,
         )
         self.assertFalse(
-            User.objects.filter(pk=self.user.pk).exists()
+            User.objects.filter(pk=other_user.pk).exists()
         )
+
+    def test_delete_view_post_cannot_delete_current_admin(self):
+        response = self.client.post(
+            reverse(
+                "accounts:accounts_delete",
+                kwargs={"username": self.user.username},
+            )
+        )
+
+        self.assertEqual(response.status_code, 404)
+        self.assertTrue(User.objects.filter(pk=self.user.pk).exists())
 
     def test_object_views_return_not_found_for_unknown_account(self):
         response = self.client.get(
