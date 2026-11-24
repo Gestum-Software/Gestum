@@ -21,6 +21,11 @@ class AccountsListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     template_name = 'accounts/accounts_list.html'
     permission_required = 'accounts.view_customuser'
 
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+        return queryset.exclude(id=self.request.user.id)
+
 
 class AccountsWithGroupsCreateView(
     LoginRequiredMixin,
@@ -45,6 +50,9 @@ class AccountsDeleteView(
     slug_url_kwarg = 'username'
     template_name = 'accounts/accounts_confirm_delete.html'
     permission_required = 'accounts.delete_customuser'
+
+    def get_queryset(self):
+        return super().get_queryset().exclude(id=self.request.user.id)
 
 
 class AccountsProfileUpdateView(
