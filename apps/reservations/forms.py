@@ -18,15 +18,27 @@ class ReservationForm(forms.ModelForm):
                 'placeholder': 'Observações sobre o recurso',
                 'maxlength': '1500'}),
 
-            'inicio': forms.DateInput(attrs={
-                'type': 'date',
-            }),
+            'inicio': forms.DateTimeInput(
+                attrs={
+                    "type": "datetime-local",
+                },
+                format="%Y-%m-%dT%H:%M",
+            ),
 
-            'fim': forms.DateInput(attrs={
-                'type': 'date',
-            }),
+            'fim': forms.DateTimeInput(
+                attrs={
+                    "type": "datetime-local"
+                },
+                format="%Y-%m-%dT%H:%M",
+            ),
 
             'resource': forms.Select(attrs={
                 'class': 'campo-recursos',
             }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["inicio"].input_formats = ["%Y-%m-%dT%H:%M"]
+        self.fields["fim"].input_formats = ["%Y-%m-%dT%H:%M"]
