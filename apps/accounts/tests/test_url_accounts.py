@@ -83,10 +83,14 @@ class AccountsUrlTest(TestCase):
                 self.assertIs(resolved_url.func.view_class, expected_view)
 
     def test_account_urls_return_successful_responses(self):
+        other_user = User.objects.create_user(
+            username="outro-usuario",
+            password="SenhaSegura123!",
+        )
         url_kwargs = {
             "accounts_list": {},
             "accounts_create": {},
-            "accounts_delete": {"username": self.user.username},
+            "accounts_delete": {"username": other_user.username},
             "edit_profile": {},
         }
 
