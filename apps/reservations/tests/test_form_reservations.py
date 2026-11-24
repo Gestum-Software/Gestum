@@ -58,10 +58,10 @@ class ReservationFormTest(TestCase):
             form.fields["observacoes"].widget,
             forms.Textarea,
         )
-        self.assertIsInstance(form.fields["inicio"].widget, forms.DateInput)
-        self.assertIsInstance(form.fields["fim"].widget, forms.DateInput)
-        self.assertEqual(form.fields["inicio"].widget.input_type, "date")
-        self.assertEqual(form.fields["fim"].widget.input_type, "date")
+        self.assertIsInstance(form.fields["inicio"].widget, forms.DateTimeInput)
+        self.assertIsInstance(form.fields["fim"].widget, forms.DateTimeInput)
+        self.assertEqual(form.fields["inicio"].widget.input_type, "datetime-local")
+        self.assertEqual(form.fields["fim"].widget.input_type, "datetime-local")
         self.assertIsInstance(form.fields["resource"].widget, forms.Select)
         self.assertEqual(
             form.fields["resource"].widget.attrs["class"],
