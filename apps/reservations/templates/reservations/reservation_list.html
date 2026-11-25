@@ -58,6 +58,11 @@
                                 {{ reservation.inicio|date:"d/m H:i" }} | {{ reservation.fim|date:"d/m H:i" }}
                             </p>
                         </div>
+
+                        <div class="reservation-detail reservation-action">
+                            <i class="fa-solid fa-info fa-lg" style="color: #6b3030;"></i>
+                            <a href="{% url 'reservations:reservation_detail' reservation.titulo %}">Ver detalhes</a>
+                        </div>
                     </div>
 
                 </div>

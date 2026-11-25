@@ -46,6 +46,11 @@ main {
     justify-content: center;
 }
 
+.reservation-action a {
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
 .link-to-update {
     text-decoration: none;
     color: var(--text-primary);
