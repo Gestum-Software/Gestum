@@ -162,6 +162,44 @@ class ReservationViewTest(TestCase):
         )
         self.assertEqual(response.context["object"], self.reservation)
 
+    def test_detail_page_displays_reservation_data_and_navigation(self):
+        response = self.client.get(
+            reverse(
+                "reservations:reservation_detail",
+                kwargs={"titulo": self.reservation.titulo},
+            )
+        )
+
+        self.assertContains(response, self.reservation.titulo)
+        self.assertContains(response, self.reservation.observacoes)
+        self.assertContains(response, self.user.username)
+        self.assertContains(response, self.resource.nome)
+        self.assertContains(
+            response,
+            timezone.localtime(self.inicio).strftime("%d/%m %H:%M"),
+        )
+        self.assertContains(
+            response,
+            timezone.localtime(self.fim).strftime("%d/%m %H:%M"),
+        )
+        self.assertContains(
+            response,
+            reverse("reservations:reservation_list"),
+        )
+
+    def test_detail_view_redirects_anonymous_user_to_login(self):
+        self.client.logout()
+
+        response = self.client.get(
+            reverse(
+                "reservations:reservation_detail",
+                kwargs={"titulo": self.reservation.titulo},
+            )
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/login/", response.url)
+
     def test_update_view_get_displays_reservation_form(self):
         response = self.client.get(
             reverse(
